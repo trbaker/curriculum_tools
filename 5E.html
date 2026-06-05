@@ -5,1253 +5,958 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>5E Science Lesson Plan Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --green-50: #EAF3DE; --green-100: #C0DD97; --green-200: #97C459;
-    --green-600: #3B6D11; --green-800: #27500A; --green-900: #173404;
-    --teal-50: #E1F5EE; --teal-100: #9FE1CB; --teal-200: #5DCAA5;
-    --teal-600: #0F6E56; --teal-800: #085041; --teal-900: #04342C;
-    --blue-50: #E6F1FB; --blue-100: #B5D4F4; --blue-200: #85B7EB;
-    --blue-600: #185FA5; --blue-800: #0C447C; --blue-900: #042C53;
-    --amber-50: #FAEEDA; --amber-100: #FAC775; --amber-200: #EF9F27;
-    --amber-600: #854F0B; --amber-800: #633806; --amber-900: #412402;
-    --coral-50: #FAECE7; --coral-100: #F5C4B3; --coral-200: #F0997B;
-    --coral-600: #993C1D; --coral-800: #712B13; --coral-900: #4A1B0C;
-    --gray-50: #F1EFE8; --gray-100: #D3D1C7; --gray-400: #888780;
-    --gray-600: #5F5E5A; --gray-800: #444441; --gray-900: #2C2C2A;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: #f5f3ee;
-    color: var(--gray-900);
-    min-height: 100vh;
-  }
-
-  .hero {
-    background: var(--teal-800);
-    padding: 2.5rem 2rem 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -80px;
-    width: 320px; height: 320px;
-    border-radius: 50%;
-    background: var(--teal-600);
-    opacity: 0.35;
-  }
-
-  .hero::after {
-    content: '';
-    position: absolute;
-    bottom: -40px; left: 40px;
-    width: 180px; height: 180px;
-    border-radius: 50%;
-    background: var(--green-600);
-    opacity: 0.25;
-  }
-
-  .hero-inner {
-    max-width: 820px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-badge {
-    display: inline-block;
-    background: var(--teal-200);
-    color: var(--teal-800);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 20px;
-    margin-bottom: 1rem;
-  }
-
-  .hero h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2.6rem;
-    color: #fff;
-    line-height: 1.15;
-    margin-bottom: 0.6rem;
-  }
-
-  .hero h1 em {
-    color: var(--teal-200);
-    font-style: italic;
-  }
-
-  .hero p {
-    color: var(--teal-100);
-    font-size: 1rem;
-    font-weight: 300;
-    max-width: 500px;
-  }
-
-  .main {
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
-  }
-
-  .input-card {
-    background: #fff;
-    border-radius: 16px;
-    border: 1px solid var(--gray-100);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-  }
-
-  .input-card h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.3rem;
-    color: var(--teal-800);
-    margin-bottom: 1.4rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .input-card h2 .icon {
-    width: 32px; height: 32px;
-    background: var(--teal-50);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-  }
-
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .form-group.full { grid-column: 1 / -1; }
-
-  label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--gray-600);
-  }
-
-  input[type="text"], select, textarea {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    padding: 10px 14px;
-    border: 1.5px solid var(--gray-100);
-    border-radius: 8px;
-    background: var(--gray-50);
-    color: var(--gray-900);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-
-  input[type="text"]:focus, select:focus, textarea:focus {
-    border-color: var(--teal-200);
-    background: #fff;
-  }
-
-  textarea { resize: vertical; min-height: 70px; }
-
-  .generate-btn {
-    width: 100%;
-    padding: 14px;
-    background: var(--teal-800);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 1.4rem;
-  }
-
-  .generate-btn:hover { background: var(--teal-600); }
-  .generate-btn:active { transform: scale(0.99); }
-  .generate-btn:disabled { opacity: 0.55; cursor: not-allowed; }
-
-  .loading {
-    text-align: center;
-    padding: 3rem 1rem;
-    display: none;
-  }
-
-  .loading-dots {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 1rem;
-  }
-
-  .loading-dots span {
-    width: 10px; height: 10px;
-    background: var(--teal-200);
-    border-radius: 50%;
-    animation: bounce 1.2s infinite ease-in-out;
-  }
-
-  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes bounce {
-    0%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-12px); }
-  }
-
-  .loading p { color: var(--gray-600); font-size: 14px; }
-
-  #lesson-output { display: none; }
-
-  .lesson-header {
-    background: var(--teal-800);
-    border-radius: 16px 16px 0 0;
-    padding: 2rem;
-    color: #fff;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .lesson-header::after {
-    content: '';
-    position: absolute;
-    top: -30px; right: -30px;
-    width: 160px; height: 160px;
-    border-radius: 50%;
-    background: var(--teal-600);
-    opacity: 0.3;
-  }
-
-  .lesson-meta {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 1rem;
-  }
-
-  .meta-pill {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    color: #fff;
-    font-size: 12px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
-
-  .lesson-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2rem;
-    line-height: 1.2;
-    margin-bottom: 0.4rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .lesson-subtitle {
-    color: var(--teal-100);
-    font-size: 14px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .lesson-body {
-    background: #fff;
-    border: 1px solid var(--gray-100);
-    border-top: none;
-    border-radius: 0 0 16px 16px;
-    overflow: hidden;
-  }
-
-  .five-e-nav {
-    display: flex;
-    border-bottom: 1px solid var(--gray-100);
-    overflow-x: auto;
-  }
-
-  .five-e-nav button {
-    flex: 1;
-    min-width: 100px;
-    padding: 12px 8px;
-    border: none;
-    background: #fff;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    color: var(--gray-400);
-    border-bottom: 2.5px solid transparent;
-    transition: all 0.15s;
-    text-transform: uppercase;
-  }
-
-  .five-e-nav button:hover { color: var(--teal-600); }
-
-  .five-e-nav button.active {
-    color: var(--teal-800);
-    border-bottom-color: var(--teal-600);
-    background: var(--teal-50);
-  }
-
-  .lesson-sections { padding: 0; }
-
-  .lesson-section {
-    display: none;
-    padding: 2rem;
-    animation: fadeIn 0.25s ease;
-  }
-
-  .lesson-section.active { display: block; }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-
-  .section-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 1.6rem;
-  }
-
-  .section-badge {
-    width: 48px; height: 48px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  .section-badge.engage { background: var(--coral-50); color: var(--coral-600); }
-  .section-badge.explore { background: var(--green-50); color: var(--green-600); }
-  .section-badge.explain { background: var(--blue-50); color: var(--blue-600); }
-  .section-badge.elaborate { background: var(--amber-50); color: var(--amber-600); }
-  .section-badge.evaluate { background: var(--teal-50); color: var(--teal-600); }
-
-  .section-title-block h3 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.35rem;
-    color: var(--gray-900);
-    margin-bottom: 3px;
-  }
-
-  .section-title-block p {
-    font-size: 12px;
-    color: var(--gray-400);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-weight: 600;
-  }
-
-  .content-block {
-    background: var(--gray-50);
-    border-radius: 10px;
-    padding: 1.25rem 1.4rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .content-block h4 {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--gray-600);
-    margin-bottom: 0.7rem;
-  }
-
-  .content-block p, .content-block li {
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--gray-800);
-  }
-
-  .content-block ul, .content-block ol {
-    padding-left: 1.4rem;
-  }
-
-  .content-block li { margin-bottom: 4px; }
-
-  .map-card {
-    border: 1.5px solid var(--blue-200);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 1.2rem;
-  }
-
-  .map-card-header {
-    background: var(--blue-50);
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .map-card-header span {
-    font-size: 18px;
-  }
-
-  .map-card-header div strong {
-    display: block;
-    font-size: 13px;
-    color: var(--blue-800);
-    font-weight: 600;
-  }
-
-  .map-card-header div small {
-    font-size: 11px;
-    color: var(--blue-600);
-  }
-
-  .map-card-body { padding: 14px 16px; }
-
-  .map-card-body p {
-    font-size: 13px;
-    color: var(--gray-800);
-    line-height: 1.65;
-    margin-bottom: 12px;
-  }
-
-  .map-link-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--blue-600);
-    color: #fff;
-    text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    transition: background 0.15s;
-  }
-
-  .map-link-btn:hover { background: var(--blue-800); }
-
-  .question-item {
-    background: #fff;
-    border: 1px solid var(--gray-100);
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 0.75rem;
-    border-left: 3px solid var(--teal-200);
-  }
-
-  .question-item .q-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--teal-600);
-    margin-bottom: 5px;
-  }
-
-  .question-item p {
-    font-size: 14px;
-    color: var(--gray-800);
-    line-height: 1.65;
-  }
-
-  .question-item .map-instruction {
-    margin-top: 8px;
-    padding: 8px 12px;
-    background: var(--blue-50);
-    border-radius: 6px;
-    font-size: 12px;
-    color: var(--blue-800);
-  }
-
-  .ngss-grid {
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .ngss-item {
-    background: #fff;
-    border: 1px solid var(--gray-100);
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-  }
-
-  .ngss-code {
-    display: inline-block;
-    background: var(--green-50);
-    color: var(--green-800);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 6px;
-    margin-bottom: 6px;
-    font-family: monospace;
-    letter-spacing: 0.04em;
-  }
-
-  .ngss-item p {
-    font-size: 13px;
-    color: var(--gray-800);
-    line-height: 1.6;
-  }
-
-  .actions-bar {
-    padding: 1.4rem 2rem;
-    border-top: 1px solid var(--gray-100);
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-    background: var(--gray-50);
-    border-radius: 0 0 16px 16px;
-  }
-
-  .action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    border: none;
-  }
-
-  .action-btn.secondary {
-    background: #fff;
-    color: var(--gray-800);
-    border: 1.5px solid var(--gray-100);
-  }
-
-  .action-btn.secondary:hover {
-    border-color: var(--teal-200);
-    color: var(--teal-800);
-  }
-
-  .action-btn.primary {
-    background: var(--teal-800);
-    color: #fff;
-  }
-
-  .action-btn.primary:hover { background: var(--teal-600); }
-
-  .error-msg {
-    background: #fff0f0;
-    border: 1px solid #f0c0c0;
-    color: #8b2020;
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 13px;
-    margin-top: 1rem;
-    display: none;
-  }
-
-
-  .console-panel {
-    margin-top: 1.4rem;
-    border: 1px solid var(--gray-100);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .console-header {
-    background: var(--gray-900);
-    padding: 8px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .console-header-left { display: flex; align-items: center; gap: 8px; }
-  .console-dots { display: flex; gap: 5px; }
-  .console-dots span { width: 10px; height: 10px; border-radius: 50%; }
-  .console-dots span:nth-child(1) { background: #ff5f57; }
-  .console-dots span:nth-child(2) { background: #febc2e; }
-  .console-dots span:nth-child(3) { background: #28c840; }
-  .console-label { font-size: 11px; color: var(--gray-400); font-family: monospace; letter-spacing: 0.04em; }
-  .console-clear {
-    background: none; border: 1px solid var(--gray-600); color: var(--gray-400);
-    font-family: monospace; font-size: 10px; padding: 3px 9px; border-radius: 4px;
-    cursor: pointer; transition: all 0.15s;
-  }
-  .console-clear:hover { border-color: var(--gray-400); color: #fff; }
-  .console-body {
-    background: #1a1a1a; padding: 10px 14px; min-height: 90px; max-height: 200px;
-    overflow-y: auto; font-family: monospace; font-size: 12px; line-height: 1.7;
-  }
-  .console-empty { color: #555; font-style: italic; }
-  .console-line { display: flex; gap: 10px; padding: 1px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
-  .console-line:last-child { border-bottom: none; }
-  .console-time { color: #555; flex-shrink: 0; }
-  .console-line.info .console-msg { color: #7dd3fc; }
-  .console-line.success .console-msg { color: #86efac; }
-  .console-line.warn .console-msg { color: #fde68a; }
-  .console-line.error .console-msg { color: #fca5a5; }
-  .console-line.log .console-msg { color: #d1d5db; }
-
-  .streaming-indicator {
-    display: inline-block;
-    width: 6px; height: 14px;
-    background: var(--teal-200);
-    border-radius: 2px;
-    animation: blink 0.7s infinite;
-    vertical-align: middle;
-    margin-left: 2px;
-  }
-
-  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
-
-  @media (max-width: 600px) {
-    .hero h1 { font-size: 1.8rem; }
-    .form-row { grid-template-columns: 1fr; }
-    .actions-bar { flex-direction: column; }
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1f1c;--ink2:#3d4a43;--ink3:#6b7a70;
+  --sage:#4a7c59;--sage-light:#e8f2eb;--sage-mid:#c2dbc9;--sage-dark:#2d5c3f;
+  --gold:#c8963a;--gold-light:#fdf3e3;
+  --sky:#2d6fa3;--sky-light:#e5f0f9;--sky-mid:#a8cceb;
+  --rust:#b54a2e;--rust-light:#fdf0ec;
+  --paper:#f8f6f1;--white:#ffffff;--border:#ddd8ce;
+}
+body{font-family:'Source Sans 3',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+.hero{background:var(--sage-dark);padding:2.8rem 2rem 2.2rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-100px;top:-100px;width:400px;height:400px;border-radius:50%;background:var(--sage);opacity:.2}
+.hero::after{content:'5E';position:absolute;right:2rem;bottom:-1.5rem;font-family:'Playfair Display',serif;font-size:9rem;color:rgba(255,255,255,.06);line-height:1;pointer-events:none}
+.hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
+.hero-eye{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sage-mid);margin-bottom:.75rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:2.4rem;color:#fff;line-height:1.15;margin-bottom:.35rem}
+.hero-ver{font-size:12px;color:rgba(255,255,255,.4);letter-spacing:.05em;margin-bottom:.8rem}
+.hero-sub{font-size:.95rem;color:var(--sage-mid);font-weight:300;max-width:480px}
+.main{max-width:860px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.8rem 2rem;margin-bottom:1.5rem;box-shadow:0 1px 8px rgba(0,0,0,.05)}
+.card-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--sage-dark);margin-bottom:1.4rem;display:flex;align-items:center;gap:10px}
+.ct-icon{width:30px;height:30px;background:var(--sage-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:1.1rem}
+.fgf{grid-column:1/-1}
+.fgrp{display:flex;flex-direction:column;gap:5px}
+label{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3)}
+input[type=text],select,textarea{font-family:'Source Sans 3',sans-serif;font-size:14px;padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;background:var(--paper);color:var(--ink);outline:none;transition:border-color .15s,background .15s;width:100%}
+input[type=text]:focus,select:focus,textarea:focus{border-color:var(--sage);background:#fff}
+textarea{resize:vertical;min-height:65px}
+.gen-btn{width:100%;padding:13px;background:var(--sage-dark);color:#fff;border:none;border-radius:10px;font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:1.2rem}
+.gen-btn:hover{background:var(--sage)}.gen-btn:active{transform:scale(.99)}.gen-btn:disabled{opacity:.5;cursor:not-allowed}
+.cwrap{margin-top:1.2rem;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.cbar{background:#1e2320;padding:7px 13px;display:flex;align-items:center;justify-content:space-between}
+.cbar-l{display:flex;align-items:center;gap:8px}
+.cdots{display:flex;gap:5px}.cdots span{width:9px;height:9px;border-radius:50%}
+.cdots span:nth-child(1){background:#ff5f57}.cdots span:nth-child(2){background:#febc2e}.cdots span:nth-child(3){background:#28c840}
+.clabel{font-size:11px;color:#5a6660;font-family:monospace}
+.cclear{background:none;border:1px solid #3a4440;color:#5a6660;font-family:monospace;font-size:10px;padding:2px 8px;border-radius:4px;cursor:pointer;transition:all .15s}
+.cclear:hover{border-color:#6a7670;color:#9ab0a0}
+.cbody{background:#181c1a;padding:9px 13px;min-height:80px;max-height:180px;overflow-y:auto;font-family:monospace;font-size:12px;line-height:1.75}
+.cempty{color:#3a4a40;font-style:italic}
+.cline{display:flex;gap:10px;border-bottom:1px solid rgba(255,255,255,.03);padding:1px 0}.cline:last-child{border-bottom:none}
+.cts{color:#3a4a40;flex-shrink:0}
+.cline.info .cmsg{color:#6db8e8}.cline.success .cmsg{color:#7ecb8f}.cline.warn .cmsg{color:#e8c96d}.cline.error .cmsg{color:#e87a7a}.cline.log .cmsg{color:#9ab8a8}
+#lesson-out{display:none}
+.lhdr{background:var(--sage-dark);border-radius:16px 16px 0 0;padding:2rem;color:#fff;position:relative;overflow:hidden}
+.lhdr::after{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:var(--sage);opacity:.25}
+.lhpills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:.9rem}
+.lhpill{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:11px;padding:3px 11px;border-radius:20px;font-weight:600}
+.lhtitle{font-family:'Playfair Display',serif;font-size:1.85rem;line-height:1.2;position:relative;z-index:1;margin-bottom:.3rem}
+.lhsub{color:var(--sage-mid);font-size:14px;position:relative;z-index:1;font-weight:300}
+.lbody{background:#fff;border:1px solid var(--border);border-top:none;border-radius:0 0 16px 16px;overflow:hidden}
+.etabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;background:#fff}
+.etab{flex:1;min-width:90px;padding:11px 6px;border:none;background:transparent;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);border-bottom:2.5px solid transparent;transition:all .15s;white-space:nowrap}
+.etab:hover{color:var(--sage)}.etab.active{color:var(--sage-dark);border-bottom-color:var(--sage);background:var(--sage-light)}
+.esec{display:none;padding:2rem;animation:fadeUp .2s ease}.esec.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.sechdr{display:flex;align-items:flex-start;gap:12px;margin-bottom:1.5rem}
+.secbadge{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px;font-weight:700;flex-shrink:0}
+.secbadge.engage{background:var(--rust-light);color:var(--rust)}
+.secbadge.explore{background:var(--sage-light);color:var(--sage-dark)}
+.secbadge.explain{background:var(--sky-light);color:var(--sky)}
+.secbadge.elaborate{background:var(--gold-light);color:var(--gold)}
+.secbadge.evaluate{background:var(--sage-light);color:var(--sage-dark)}
+.secbadge.ngss{background:var(--sky-light);color:var(--sky)}
+.seclbl h3{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--ink);margin-bottom:2px}
+.seclbl p{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);font-weight:600}
+.blk{background:var(--paper);border-radius:9px;padding:1.15rem 1.3rem;margin-bottom:1rem}
+.blk h4{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink3);margin-bottom:.65rem}
+.blk p,.blk li{font-size:14px;line-height:1.8;color:var(--ink2)}
+.blk ul,.blk ol{padding-left:1.3rem}.blk li{margin-bottom:3px}
+.mcard{border:1.5px solid var(--sky-mid);border-radius:10px;overflow:hidden;margin-bottom:1rem}
+.mcard-hdr{background:var(--sky-light);padding:11px 15px;display:flex;align-items:center;gap:10px}
+.mcard-hdr strong{display:block;font-size:13px;color:var(--sky);font-weight:600}
+.mcard-hdr small{font-size:11px;color:var(--sky)}
+.mcard-body{padding:13px 15px}
+.mcard-body p{font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:10px}
+.mbtn{display:inline-flex;align-items:center;gap:6px;background:var(--sky);color:#fff;text-decoration:none;padding:7px 15px;border-radius:7px;font-size:13px;font-weight:600;transition:background .15s}
+.mbtn:hover{background:var(--sage-dark)}
+.qitem{background:#fff;border:1px solid var(--border);border-radius:9px;padding:.95rem 1.15rem;margin-bottom:.7rem;border-left:3px solid var(--sage-mid)}
+.qnum{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--sage);margin-bottom:4px}
+.qitem p{font-size:14px;color:var(--ink2);line-height:1.7}
+.qmap{margin-top:7px;padding:7px 10px;background:var(--sky-light);border-radius:6px;font-size:12px;color:var(--sky)}
+.vitem{padding:8px 0;border-bottom:1px solid var(--border)}.vitem:last-child{border-bottom:none}
+.vterm{font-size:13px;font-weight:600;color:var(--sage-dark)}.vdef{font-size:13px;color:var(--ink3)}
+.nitem{background:#fff;border:1px solid var(--border);border-radius:9px;padding:.95rem 1.15rem;margin-bottom:.7rem}
+.ncode{display:inline-block;background:var(--sage-light);color:var(--sage-dark);font-size:11px;font-weight:700;padding:2px 9px;border-radius:5px;font-family:monospace;margin-bottom:6px}
+.ncat{display:inline-block;font-size:10px;font-weight:600;padding:2px 9px;border-radius:5px;margin-left:6px;letter-spacing:.04em}
+.ncat.pe{background:var(--sage-light);color:var(--sage-dark)}.ncat.dci{background:var(--sky-light);color:var(--sky)}
+.ncat.sep{background:var(--gold-light);color:var(--gold)}.ncat.cc{background:var(--rust-light);color:var(--rust)}
+.ntitle{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.ndesc{font-size:13px;color:var(--ink3);line-height:1.65}
+.actbar{padding:1.2rem 2rem;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;background:var(--paper);border-radius:0 0 16px 16px}
+.abtn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:none}
+.abtn.sec{background:#fff;color:var(--ink2);border:1.5px solid var(--border)}.abtn.sec:hover{border-color:var(--sage);color:var(--sage-dark)}
+.abtn.pri{background:var(--sage-dark);color:#fff}.abtn.pri:hover{background:var(--sage)}
+@media(max-width:600px){.hero h1{font-size:1.7rem}.fg{grid-template-columns:1fr}.actbar{flex-direction:column}}
 </style>
 </head>
 <body>
-
 <div class="hero">
   <div class="hero-inner">
-    <span class="hero-badge">5E Instructional Model</span>
+    <div class="hero-eye">5E Instructional Model &middot; K&ndash;12</div>
     <h1>Science Lesson Plan Builder</h1>
-    <p style="font-size:12px;color:var(--teal-100);letter-spacing:0.06em;margin-bottom:0.75rem;font-weight:400">Version 1.0</p>
-    <p>AI-powered K–12 lesson plans with ArcGIS map integration, NGSS alignment, and interactive activities.</p>
+    <div class="hero-ver">Version 1.0</div>
+    <p class="hero-sub">Generate complete, NGSS-aligned lesson plans with ArcGIS map activities &mdash; works entirely offline, no API key needed.</p>
   </div>
 </div>
 
 <div class="main">
-
-  <div class="input-card">
-    <h2>
-      <span class="icon">🔬</span>
-      Configure Your Lesson
-    </h2>
-
-    <div class="form-row">
-      <div class="form-group full">
-        <label>Science Topic</label>
-        <input type="text" id="topic" placeholder="e.g., Watersheds and Water Quality, Plate Tectonics, Ecosystems..." />
-      </div>
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">&#x2697;&#xFE0F;</span> Configure Your Lesson</div>
+    <div class="fg">
+      <div class="fgrp fgf"><label>Science Topic</label><input type="text" id="topic" placeholder="e.g., Tornadoes, Watersheds, Plate Tectonics, Ecosystems, Photosynthesis&hellip;"></div>
     </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Grade Band</label>
+    <div class="fg">
+      <div class="fgrp"><label>Grade Band</label>
         <select id="grade">
-          <option value="">Select grade band...</option>
-          <option value="K-2">K–2 (Primary)</option>
-          <option value="3-5">3–5 (Upper Elementary)</option>
-          <option value="6-8">6–8 (Middle School)</option>
-          <option value="9-12">9–12 (High School)</option>
+          <option value="">Select grade band&hellip;</option>
+          <option value="K-2">K&ndash;2 (Primary)</option>
+          <option value="3-5">3&ndash;5 (Upper Elementary)</option>
+          <option value="6-8">6&ndash;8 (Middle School)</option>
+          <option value="9-12">9&ndash;12 (High School)</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Science Domain</label>
+      <div class="fgrp"><label>Science Domain</label>
         <select id="domain">
-          <option value="">Select domain...</option>
+          <option value="General Science">General Science</option>
           <option value="Life Science">Life Science</option>
-          <option value="Earth & Space Science">Earth &amp; Space Science</option>
+          <option value="Earth &amp; Space Science">Earth &amp; Space Science</option>
           <option value="Physical Science">Physical Science</option>
           <option value="Environmental Science">Environmental Science</option>
-          <option value="Engineering & Technology">Engineering &amp; Technology</option>
+          <option value="Engineering &amp; Technology">Engineering &amp; Technology</option>
         </select>
       </div>
     </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Lesson Duration</label>
+    <div class="fg">
+      <div class="fgrp"><label>Lesson Duration</label>
         <select id="duration">
           <option value="20 minutes">20 minutes (mini lesson)</option>
           <option value="45 minutes">45 minutes (1 class period)</option>
           <option value="90 minutes" selected>90 minutes (block period)</option>
-          <option value="2-3 class periods">2–3 class periods</option>
+          <option value="2-3 class periods">2&ndash;3 class periods</option>
           <option value="1 week">1 week unit</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Geographic Focus (optional)</label>
-        <input type="text" id="geography" placeholder="e.g., Pacific Northwest, Mississippi River..." />
-      </div>
+      <div class="fgrp"><label>Geographic Focus (optional)</label><input type="text" id="geo" placeholder="e.g., Great Plains, Pacific Northwest&hellip;"></div>
     </div>
-
-    <div class="form-row">
-      <div class="form-group full">
-        <label>Additional Context (optional)</label>
-        <textarea id="context" placeholder="Any specific learning objectives, local connections, or accommodations to consider..."></textarea>
-      </div>
+    <div class="fg">
+      <div class="fgrp fgf"><label>Additional Context (optional)</label><textarea id="ctx" placeholder="Specific objectives, local connections, accommodations&hellip;"></textarea></div>
     </div>
-
-    <div class="error-msg" id="error-msg">Please enter a science topic and select a grade band before generating.</div>
-
-    <button class="generate-btn" id="generate-btn" onclick="generateLesson()">
-      <span>✦</span> Generate 5E Lesson Plan
-    </button>
-
-    <div class="console-panel">
-      <div class="console-header">
-        <div class="console-header-left">
-          <div class="console-dots"><span></span><span></span><span></span></div>
-          <span class="console-label">System Console &mdash; v1.0</span>
-        </div>
-        <button class="console-clear" onclick="clearConsole()">Clear</button>
+    <button class="gen-btn" id="genbtn" onclick="generate()">&#10022; Generate 5E Lesson Plan</button>
+    <div class="cwrap">
+      <div class="cbar">
+        <div class="cbar-l"><div class="cdots"><span></span><span></span><span></span></div><span class="clabel">System Console &mdash; v1.0</span></div>
+        <button class="cclear" onclick="clearCon()">Clear</button>
       </div>
-      <div class="console-body" id="console-body">
-        <span class="console-empty">No messages yet. Console output will appear here.</span>
-      </div>
+      <div class="cbody" id="con"><span class="cempty">No messages yet.</span></div>
     </div>
   </div>
 
-  <div class="loading" id="loading">
-    <div class="loading-dots">
-      <span></span><span></span><span></span>
+  <div id="lesson-out">
+    <div class="lhdr">
+      <div class="lhpills" id="pills"></div>
+      <div class="lhtitle" id="ltitle"></div>
+      <div class="lhsub" id="lsub"></div>
     </div>
-    <p id="loading-msg">Building your lesson plan...</p>
+    <div class="lbody">
+      <div class="etabs">
+        <button class="etab active" onclick="tab('engage',this)">&#128293; Engage</button>
+        <button class="etab" onclick="tab('explore',this)">&#128269; Explore</button>
+        <button class="etab" onclick="tab('explain',this)">&#128161; Explain</button>
+        <button class="etab" onclick="tab('elaborate',this)">&#127760; Elaborate</button>
+        <button class="etab" onclick="tab('evaluate',this)">&#9989; Evaluate</button>
+        <button class="etab" onclick="tab('ngss',this)">&#128203; Standards</button>
+      </div>
+      <div id="s-engage" class="esec active"></div>
+      <div id="s-explore" class="esec"></div>
+      <div id="s-explain" class="esec"></div>
+      <div id="s-elaborate" class="esec"></div>
+      <div id="s-evaluate" class="esec"></div>
+      <div id="s-ngss" class="esec"></div>
+      <div class="actbar">
+        <button class="abtn sec" onclick="generate()">&#8634; Regenerate</button>
+        <button class="abtn pri" onclick="dlRTF()">&#11015; Download RTF</button>
+      </div>
+    </div>
   </div>
-
-  <div id="lesson-output">
-
-    <div class="lesson-header">
-      <div class="lesson-meta" id="lesson-meta"></div>
-      <div class="lesson-title" id="lesson-title"></div>
-      <div class="lesson-subtitle" id="lesson-subtitle"></div>
-    </div>
-
-    <div class="lesson-body">
-      <div class="five-e-nav">
-        <button class="active" onclick="showSection('engage', this)">🔥 Engage</button>
-        <button onclick="showSection('explore', this)">🔍 Explore</button>
-        <button onclick="showSection('explain', this)">💡 Explain</button>
-        <button onclick="showSection('elaborate', this)">🌐 Elaborate</button>
-        <button onclick="showSection('evaluate', this)">✅ Evaluate</button>
-        <button onclick="showSection('ngss', this)">📋 Standards</button>
-      </div>
-
-      <div class="lesson-sections">
-
-        <div class="lesson-section active" id="section-engage">
-          <div class="section-header">
-            <div class="section-badge engage">E</div>
-            <div class="section-title-block">
-              <h3>Engage</h3>
-              <p>Hook &amp; Prior Knowledge</p>
-            </div>
-          </div>
-          <div id="engage-content"></div>
-        </div>
-
-        <div class="lesson-section" id="section-explore">
-          <div class="section-header">
-            <div class="section-badge explore">E</div>
-            <div class="section-title-block">
-              <h3>Explore</h3>
-              <p>Investigation &amp; Map Activity</p>
-            </div>
-          </div>
-          <div id="explore-content"></div>
-        </div>
-
-        <div class="lesson-section" id="section-explain">
-          <div class="section-header">
-            <div class="section-badge explain">E</div>
-            <div class="section-title-block">
-              <h3>Explain</h3>
-              <p>Direct Instruction &amp; Sense-Making</p>
-            </div>
-          </div>
-          <div id="explain-content"></div>
-        </div>
-
-        <div class="lesson-section" id="section-elaborate">
-          <div class="section-header">
-            <div class="section-badge elaborate">E</div>
-            <div class="section-title-block">
-              <h3>Elaborate</h3>
-              <p>Apply &amp; Extend</p>
-            </div>
-          </div>
-          <div id="elaborate-content"></div>
-        </div>
-
-        <div class="lesson-section" id="section-evaluate">
-          <div class="section-header">
-            <div class="section-badge evaluate">E</div>
-            <div class="section-title-block">
-              <h3>Evaluate</h3>
-              <p>Assessment &amp; Reflection</p>
-            </div>
-          </div>
-          <div id="evaluate-content"></div>
-        </div>
-
-        <div class="lesson-section" id="section-ngss">
-          <div class="section-header">
-            <div class="section-badge" style="background:#E1F5EE;color:#0F6E56;">N</div>
-            <div class="section-title-block">
-              <h3>NGSS Alignment</h3>
-              <p>Next Generation Science Standards</p>
-            </div>
-          </div>
-          <div id="ngss-content"></div>
-        </div>
-
-      </div>
-
-      <div class="actions-bar">
-        <button class="action-btn secondary" onclick="generateLesson()">↺ Regenerate</button>
-        <button class="action-btn primary" onclick="downloadRTF()">⬇ Download RTF</button>
-      </div>
-    </div>
-
-  </div>
-
 </div>
 
 <script>
+var LESSON=null;
 
-function clearConsole() {
-  document.getElementById('console-body').innerHTML = '<span class="console-empty">Console cleared.</span>';
+function clog(msg,type){
+  type=type||'log';
+  var b=document.getElementById('con');
+  var e=b.querySelector('.cempty');if(e)e.remove();
+  var now=new Date(),ts=now.toTimeString().slice(0,8);
+  var ln=document.createElement('div');ln.className='cline '+type;
+  ln.innerHTML='<span class="cts">'+ts+'</span><span class="cmsg">'+String(msg).replace(/</g,'&lt;')+'</span>';
+  b.appendChild(ln);b.scrollTop=b.scrollHeight;
 }
-
-function consoleLog(msg, type) {
-  type = type || 'log';
-  const body = document.getElementById('console-body');
-  const empty = body.querySelector('.console-empty');
-  if (empty) empty.remove();
-  const now = new Date();
-  const ts = now.toTimeString().slice(0,8);
-  const line = document.createElement('div');
-  line.className = 'console-line ' + type;
-  line.innerHTML = '<span class="console-time">' + ts + '</span><span class="console-msg">' + String(msg).replace(/</g,'&lt;') + '</span>';
-  body.appendChild(line);
-  body.scrollTop = body.scrollHeight;
-}
-
-let currentLesson = null;
-
-function showSection(id, btn) {
-  document.querySelectorAll('.lesson-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.five-e-nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('section-' + id).classList.add('active');
+function clearCon(){document.getElementById('con').innerHTML='<span class="cempty">Console cleared.</span>';}
+function tab(id,btn){
+  document.querySelectorAll('.esec').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.etab').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('s-'+id).classList.add('active');
   btn.classList.add('active');
 }
 
-async function generateLesson() {
-  const topic = document.getElementById('topic').value.trim();
-  const grade = document.getElementById('grade').value;
-  const domain = document.getElementById('domain').value;
-  const duration = document.getElementById('duration').value;
-  const geography = document.getElementById('geography').value.trim();
-  const context = document.getElementById('context').value.trim();
-  const errEl = document.getElementById('error-msg');
-
-  if (!topic || !grade) {
-    errEl.style.display = 'block';
-    return;
-  }
-  errEl.style.display = 'none';
-
-  document.getElementById('generate-btn').disabled = true;
-  consoleLog('Generating lesson plan for topic: ' + topic + ' | Grade: ' + grade, 'info');
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('lesson-output').style.display = 'none';
-
-  const loadingMsgs = [
-    'Designing 5E instructional flow...',
-    'Sourcing ArcGIS map layers...',
-    'Aligning NGSS standards...',
-    'Crafting age-appropriate questions...',
-    'Finalizing your lesson plan...'
-  ];
-  let msgIdx = 0;
-  const msgInterval = setInterval(() => {
-    msgIdx = (msgIdx + 1) % loadingMsgs.length;
-    document.getElementById('loading-msg').textContent = loadingMsgs[msgIdx];
-  }, 2200);
-
-  const geoNote = geography ? ` with a geographic focus on ${geography}` : '';
-  const ctxNote = context ? ` Additional context: ${context}` : '';
-
-  const prompt = `You are an expert K-12 science curriculum designer. Create a detailed 5E instructional model lesson plan.
-
-Topic: ${topic}
-Grade Band: ${grade}
-Science Domain: ${domain || 'General Science'}
-Duration: ${duration}${geoNote}${ctxNote}
-
-Return ONLY a raw JSON object. No markdown fences, no backticks, no explanation before or after. The JSON must have exactly these fields:
-
-title (string), subtitle (string), gradeband (string, use "${grade}"), domain (string, use "${domain || 'Science'}"), duration (string, use "${duration}"),
-
-engage: object with hook (string), priorKnowledge (array of 3 strings), materials (array of 3-5 strings), teacherNotes (string)
-
-explore: object with overview (string), mapActivity (object with arcgisUrl string, layerDescription string, suggestedLayers array of 3 strings, studentInstructions string), mapQuestions (array of 4 objects each with question string, mapInstruction string, bloomsLevel string)
-
-explain: object with keyVocabulary (array of 4 objects each with term and definition), coreConcepts (array of 3 strings), discussion (array of 2 strings), teacherNotes (string)
-
-elaborate: object with activity (string), realWorldConnections (array of 3 strings), extensionMapTask (string), groupWork (string)
-
-evaluate: object with formativeAssessments (array of 2 strings), summativeTask (string), exitTicket (array of 2 strings), rubricCriteria (array of 4 strings)
-
-ngss: array of 4 objects each with code (real NGSS code like MS-ESS2-2), title (string), description (string), category (one of: Performance Expectation, Disciplinary Core Idea, Science and Engineering Practice, Crosscutting Concept)
-
-Rules:
-- arcgisUrl must be a real ArcGIS web map URL relevant to the topic, e.g. https://www.arcgis.com/apps/mapviewer/index.html
-- All content must be age-appropriate for grade band ${grade}
-- mapQuestions must each require the student to interact with the map before answering
-- bloomsLevel values must be one of: Remembering, Understanding, Applying, Analyzing, Evaluating, Creating
-- Use real valid NGSS codes for grade band ${grade} and this topic
-- Do not include any text outside the JSON object`;
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    const data = await response.json();
-    clearInterval(msgInterval);
-
-    consoleLog('API response status: ' + response.status, response.ok ? 'success' : 'error');
-    if (!response.ok) {
-      throw new Error(`API error ${response.status}: ${JSON.stringify(data)}`);
+// ── KNOWLEDGE BASE ──────────────────────────────────────────────────────────
+var DB = {
+  tornado:{
+    keys:['tornado','tornadoes','twister','severe storm'],
+    label:'Severe Weather & Tornadoes',
+    domain:'Earth & Space Science',
+    mapUrl:'https://www.arcgis.com/apps/mapviewer/index.html?webmap=d3ffea931f4a455a9b3822b6f73c8936',
+    mapLayers:['NOAA Tornado Tracks (1950–present)','Storm-based Warning Polygons','NWS Radar Mosaics'],
+    mapDesc:'NOAA historical tornado tracks and storm warning layers showing paths, EF ratings, and frequency by region.',
+    data:{
+      'K-2':{
+        hook:'Show a photo of a funnel cloud and ask: "What do you think makes air spin like that? Have you ever seen a storm?"',
+        priorQ:['Have you ever seen a big storm?','What does wind feel like?','What makes a storm dangerous?'],
+        materials:['Storm photos or a picture book about weather','Pinwheel or paper fan','Weather journal and crayons'],
+        mapInstr:'Look at the swirly lines on the map — each line is the path a tornado traveled. Find a line near where you live.',
+        questions:[
+          {q:'Where do you see the most tornado lines on the map?',map:'Zoom out to see the whole United States. Look for where lines bunch together.',bloom:'Remembering'},
+          {q:'Does your city or town have any tornado lines near it?',map:'Type your city name in the search bar and zoom in to look.',bloom:'Understanding'}
+        ],
+        vocab:[{t:'Tornado',d:'A spinning column of air that touches the ground'},{t:'Funnel cloud',d:'The spinning cloud shape of a tornado before it reaches the ground'},{t:'Wind',d:'Moving air'},{t:'Storm',d:'Bad weather with strong rain, wind, or thunder'}],
+        concepts:['Tornadoes are spinning columns of air that touch the ground','Strong winds can be very dangerous','Storms form from clouds and moisture in the atmosphere'],
+        discussion:['What would you do if you heard a tornado warning?','Why do meteorologists study storms?'],
+        teacherNotes:'Record student ideas on chart paper. Avoid correcting misconceptions now — save them for the Explain phase. Focus on building curiosity.',
+        realWorld:['Tornado drills at school keep students safe','Meteorologists warn people before tornadoes arrive','Storm shelters protect communities in tornado-prone areas'],
+        extensionMap:'Find the longest tornado track on the map. How many states did it cross?',
+        groupWork:'In pairs, draw a map of your neighborhood and mark where you think the safest shelter spots would be during a tornado.',
+        formative:['Thumbs up/down: Does the spinning air in a tornado touch the ground?','Quick sketch: draw a tornado and label the funnel cloud'],
+        summative:'Draw a picture of what a tornado looks like and write one sentence about how to stay safe during a storm.',
+        exitQ:['Name one thing you learned about tornadoes today.','What is one way to stay safe in a storm?'],
+        rubric:['Accurately draws or describes a tornado','Names one safety action','Uses at least one vocabulary word correctly','Identifies tornadoes on the map'],
+        ngss:[
+          {code:'K-ESS3-2',title:'Natural Hazards',desc:'Ask questions to obtain information about the purpose of weather forecasting to prepare for, and respond to, severe weather.',cat:'PE'},
+          {code:'ESS2.D',title:'Weather and Climate',desc:'Weather is the combination of sunlight, wind, snow or rain, and temperature in a particular region at a particular time.',cat:'DCI'},
+          {code:'SEP-1',title:'Asking Questions',desc:'Ask questions based on observations to find more information about the natural and designed world.',cat:'SEP'},
+          {code:'CC-2',title:'Cause and Effect',desc:'Events have causes that generate observable patterns.',cat:'CC'}
+        ]
+      },
+      '3-5':{
+        hook:'Play a 30-second tornado radar loop. Ask: "What patterns do you notice about where tornadoes form? What do you wonder about these storms?"',
+        priorQ:['What do you already know about weather?','Where have you heard of tornadoes happening?','What do you think makes a tornado spin?'],
+        materials:['Printed maps of tornado occurrences','Colored pencils for data mapping','Student investigation data sheet'],
+        mapInstr:'Click on three different tornado track lines. For each one, record: the state, year, and EF rating. Look for a pattern in where most lines appear.',
+        questions:[
+          {q:'Which three states appear to have the most tornado tracks?',map:'Zoom to the central United States and look for where the orange lines are densest.',bloom:'Remembering'},
+          {q:'Do tornadoes seem to travel in a particular direction? What direction?',map:'Click on several tornado track arrows and note which direction they point.',bloom:'Analyzing'},
+          {q:'Why do you think Tornado Alley is located where it is? What clues does the map give?',map:'Turn on the terrain/elevation layer and compare it to the tornado track layer.',bloom:'Evaluating'},
+          {q:'Design a safer town using what you know about tornado paths. Where would you place emergency shelters?',map:'Use the measurement tool to estimate how far shelters should be from high-risk zones.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Tornado Alley',d:'A region in the central U.S. where tornadoes occur most frequently'},{t:'EF Scale',d:'Enhanced Fujita scale — rates tornado strength from EF0 (weakest) to EF5 (strongest)'},{t:'Supercell',d:'A large, rotating thunderstorm that can produce tornadoes'},{t:'Watch vs. Warning',d:'A watch means conditions are favorable; a warning means a tornado has been spotted or detected'}],
+        concepts:['Tornadoes form from rotating supercell thunderstorms','The EF scale measures tornado wind speed and damage','Tornado Alley exists because of colliding warm and cold air masses'],
+        discussion:['How did the map data confirm or challenge your predictions?','Why do you think some areas have more tornadoes than others?'],
+        teacherNotes:'Use students map findings as anchor points. Reference specific states or regions they identified. Correct misconceptions using map evidence.',
+        realWorld:['Weather apps use radar data to send tornado alerts to phones','Storm chasers collect data that improves warnings for communities','Mobile homes are especially vulnerable to tornadoes and need special safety plans'],
+        extensionMap:'Filter the map to show only EF3-EF5 tornadoes. Which states are most affected by the strongest tornadoes?',
+        groupWork:'Groups of 3 create a tornado risk infographic for an assigned state using data they collected from the ArcGIS map.',
+        formative:['Pair-share: name two states in Tornado Alley and explain why they are at risk','Map check: teacher reviews annotated map screenshots for accurate pattern identification'],
+        summative:'Create a tornado safety brochure for your community using data from the ArcGIS map, including a map sketch showing your local risk.',
+        exitQ:['What is one pattern you found in the tornado track map?','What is one question you still have that the map data could not fully answer?'],
+        rubric:['Uses specific EF ratings or location data from the map as evidence','Correctly applies at least two vocabulary terms','Identifies Tornado Alley and explains why it exists','Proposes a safety recommendation with map-based reasoning'],
+        ngss:[
+          {code:'3-ESS2-1',title:'Weather & Climate',desc:'Represent data in tables and graphical displays to describe typical weather conditions expected during a particular season.',cat:'PE'},
+          {code:'3-ESS3-1',title:'Natural Hazards',desc:'Make a claim about the merit of a design solution that reduces the impacts of a weather-related hazard.',cat:'PE'},
+          {code:'ESS2.D',title:'Weather and Climate',desc:'Scientists record patterns of the weather across different times and areas so that they can make predictions.',cat:'DCI'},
+          {code:'SEP-4',title:'Analyzing Data',desc:'Analyze and interpret data to make sense of phenomena using logical reasoning.',cat:'SEP'}
+        ]
+      },
+      '6-8':{
+        hook:'Display a map of Tornado Alley and last year\'s tornado outbreak data. Pose: "Why do most U.S. tornadoes strike the same band of states year after year? What makes this region unique?"',
+        priorQ:['What causes air masses to move?','What is the difference between a tornado watch and a warning?','How do meteorologists track storms in real time?'],
+        materials:['ArcGIS map access (tablet or computer)','Storm data recording sheet','Graph paper for data analysis'],
+        mapInstr:'Filter the tornado tracks layer to show only EF3-EF5 tornadoes since 2000. Zoom to Tornado Alley. Identify two geographic features that may influence storm paths and frequency.',
+        questions:[
+          {q:'What is the most common EF rating for historical tornadoes in your region?',map:'Filter the tornado track layer by EF rating and examine your region specifically.',bloom:'Remembering'},
+          {q:'Compare tornado frequency between the 1960s and 2010s in the same region. What changed?',map:'Use the time slider to filter tornado tracks by decade and compare the density.',bloom:'Analyzing'},
+          {q:'Why might some states with high tornado frequency have lower death tolls per event than others?',map:'Toggle on the population density layer and compare it against tornado track density.',bloom:'Evaluating'},
+          {q:'Identify two counties where you would recommend a new NWS Doppler radar installation. Justify your recommendation using map data.',map:'Examine gaps in the radar range rings coverage layer and identify underserved areas.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Mesocyclone',d:'A rotating column of air within a supercell thunderstorm, the precursor to a tornado'},{t:'Wind shear',d:'A change in wind speed or direction with altitude that can trigger atmospheric rotation'},{t:'Doppler radar',d:'A radar system that detects precipitation movement and measures wind velocity in storms'},{t:'Tornado vortex signature',d:'A distinct radar pattern indicating a tornado may exist near the ground'}],
+        concepts:['Wind shear creates the rotation that initiates tornado development inside supercells','Doppler radar is the primary technology for tornado detection and timely warning','Geographic features such as terrain and proximity to moisture sources influence tornado frequency'],
+        discussion:['How did the map data confirm or challenge your predictions from the Engage phase?','What additional data would improve our ability to predict where tornadoes will occur?'],
+        teacherNotes:'Use the mesocyclone formation diagram alongside the map. Have students compare the radar signatures they found to the conceptual model you present.',
+        realWorld:['The 2011 Joplin, MO tornado killed 158 people — the average warning lead time was only 24 minutes','New phased-array radar technology can update every 30 seconds compared to 4-6 minutes for standard radar','Tornado-resistant building codes in high-risk zones have been shown to significantly reduce casualties'],
+        extensionMap:'Compare tornado density maps for the Great Plains and Dixie Alley. List three geographic or meteorological differences that explain the patterns.',
+        groupWork:'Groups analyze a major historical tornado outbreak using the map, write a NOAA-style storm summary, and present findings to the class.',
+        formative:['Map annotation check: teacher reviews student-identified patterns for scientific accuracy','Exit ticket: name two factors that increase tornado risk for a specific region'],
+        summative:'Write a two-page analysis identifying the five most tornado-vulnerable counties in your state using ArcGIS map data, and propose one evidence-based policy recommendation.',
+        exitQ:['What is one geographic pattern you found in the tornado track data and what does it reveal about storm formation?','What is one question the map data raised that you still cannot fully explain?'],
+        rubric:['Uses EF ratings, geographic location, and time data from the map as specific evidence','Correctly applies all four vocabulary terms','Explains the role of wind shear and mesocyclone formation in tornado development','Proposes a policy recommendation supported by spatial data from the map'],
+        ngss:[
+          {code:'MS-ESS2-5',title:'Earth\'s Systems',desc:'Collect data to provide evidence for how the motions and complex interactions of air masses result in changes in weather conditions.',cat:'PE'},
+          {code:'MS-ESS3-2',title:'Natural Hazards',desc:'Analyze and interpret data on natural hazards to forecast future catastrophic events and inform technologies to mitigate their effects.',cat:'PE'},
+          {code:'ESS2.C',title:'The Roles of Water in Earth\'s Surface Processes',desc:'Variations in density due to variations in temperature and salinity drive global ocean currents and influence regional weather patterns.',cat:'DCI'},
+          {code:'CC-3',title:'Scale, Proportion & Quantity',desc:'Phenomena observable at one scale may not be observable at another; time, space, and energy each come in multiple scales.',cat:'CC'}
+        ]
+      },
+      '9-12':{
+        hook:'Display a sounding diagram showing CAPE and wind shear values before a major tornado outbreak. Ask: "What atmospheric conditions create the perfect environment for tornado genesis, and why are they so hard to predict with precision?"',
+        priorQ:['Describe the relationship between air pressure and storm formation.','What is wind shear and how does it relate to rotating supercells?','How are Doppler radar and numerical weather prediction models used together operationally?'],
+        materials:['ArcGIS StoryMap access on computers','Atmospheric sounding data printout for analysis','Quantitative analysis worksheet'],
+        mapInstr:'Download the tornado dataset for the past 30 years. Map magnitude vs. depth for different tectonic settings. Identify patterns at different geographic locations and seasons.',
+        questions:[
+          {q:'How has the annual tornado count trend changed since 1950, and what factors might explain this trend?',map:'Open the temporal analysis panel in the NOAA tornado dataset and examine decadal patterns.',bloom:'Analyzing'},
+          {q:'Analyze the relationship between topography and EF4-EF5 tornado occurrence. Where are the highest-intensity events concentrated?',map:'Overlay a DEM hillshade layer with tornado tracks filtered to EF4 and above.',bloom:'Evaluating'},
+          {q:'Compare the tornado threat corridors of the Great Plains with Dixie Alley. What geographic and meteorological factors differentiate them?',map:'Zoom to both regions and toggle climatological and terrain layers for comparison.',bloom:'Evaluating'},
+          {q:'Propose a county-level emergency preparedness index using at least three layers of map data. Define and justify each criterion you use.',map:'Combine population density, tornado frequency, shelter locations, and response time layers.',bloom:'Creating'}
+        ],
+        vocab:[{t:'CAPE',d:'Convective Available Potential Energy — a measure of the amount of atmospheric instability available for storm development'},{t:'Hodograph',d:'A vector diagram showing how wind speed and direction change with altitude, used to assess tornado potential'},{t:'Vorticity',d:'A measure of the local rotation in the atmosphere; high vorticity is associated with storm rotation'},{t:'Supercell',d:'A long-lived rotating thunderstorm with a persistent mesocyclone, the storm type responsible for the most violent tornadoes'}],
+        concepts:['CAPE and vertical wind shear are the two critical ingredients for tornado-producing supercells','Tornado climatology reveals non-random geographic, seasonal, and diurnal patterns that can guide preparedness','Numerical weather prediction models have improved lead times but false alarm rates remain a significant challenge'],
+        discussion:['How did the spatial patterns in the map data relate to the atmospheric science concepts we studied?','What are the ethical implications of false alarms in tornado warning systems?'],
+        teacherNotes:'Connect hodograph interpretation to the spatial patterns students found on the map. Use the sounding data printout to bridge atmospheric dynamics to geographic distribution.',
+        realWorld:['False alarm rates directly affect public compliance with tornado warnings — the cry-wolf effect is well documented','AI and machine learning models are being tested to improve 0-1 hour tornado probability forecasts','Climate projections suggest possible geographic shifts in tornado occurrence, though research is ongoing and contested'],
+        extensionMap:'Develop a probabilistic seismic hazard-style analysis for tornado risk using frequency, magnitude, and population exposure data from the map.',
+        groupWork:'Teams produce a 10-minute briefing for a simulated county emergency management board, recommending infrastructure investments based on tornado climatology data from the map.',
+        formative:['Peer review of map-based analysis drafts using a structured rubric','Teacher conference: 5-minute check-in on quantitative reasoning and evidence use'],
+        summative:'Prepare a 10-minute briefing (slides and map screenshots) for a county emergency manager, recommending at least two infrastructure investments based on tornado climatology data with quantitative justification.',
+        exitQ:['What is one pattern in the tornado climatology data that you can now explain using atmospheric dynamics?','What limitation of the dataset or map tool most affected the quality of your analysis?'],
+        rubric:['Integrates CAPE, shear, and geographic data into a coherent causal explanation','Quantifies patterns using specific data values from the map','Critically evaluates the limitations of the dataset and warning system','Proposes infrastructure investments with cost-benefit reasoning grounded in spatial data'],
+        ngss:[
+          {code:'HS-ESS2-2',title:'Earth\'s Systems',desc:'Analyze geoscience data to make the claim that one change to Earth\'s surface can create feedbacks that cause changes to other Earth systems.',cat:'PE'},
+          {code:'HS-ESS3-1',title:'Earth & Human Activity',desc:'Construct an explanation based on evidence for how natural hazards have influenced human activity and infrastructure decisions.',cat:'PE'},
+          {code:'SEP-6',title:'Constructing Explanations',desc:'Construct an explanation based on valid and reliable evidence obtained from a variety of sources and consistent with scientific ideas.',cat:'SEP'},
+          {code:'CC-7',title:'Stability and Change',desc:'Much of science deals with constructing explanations of how things change and how they remain stable; feedback stabilizes or destabilizes systems.',cat:'CC'}
+        ]
+      }
     }
-    if (!data.content || !data.content.length) {
-      throw new Error('Empty response from API');
+  },
+  watershed:{
+    keys:['watershed','water quality','water cycle','hydrology','stream','river','runoff','erosion','groundwater'],
+    label:'Watersheds & Water Quality',
+    domain:'Earth & Space Science',
+    mapUrl:'https://www.arcgis.com/apps/mapviewer/index.html?webmap=2f18679bcb634c42a6ec5d46fdee9a92',
+    mapLayers:['EPA Watershed Boundary Dataset','USGS StreamStats Flow Data','National Water Quality Monitoring Network'],
+    mapDesc:'EPA watershed boundaries, USGS stream gauge data, and national water quality monitoring stations showing land use and pollutant concentration patterns.',
+    data:{
+      'K-2':{
+        hook:'Hold up a clear cup of clean water and a cup of muddy water. Ask: "Which water would you want to drink? Where do you think our drinking water comes from?"',
+        priorQ:['Where does rain go after it falls?','What do you use water for every day?','Have you ever seen a creek or river near your home?'],
+        materials:['Two cups: one clear, one muddy water','Funnel and coffee filter for water cleaning demo','Crayons and drawing paper'],
+        mapInstr:'Find the blue lines on the map — those are rivers and streams. Trace one blue line from the mountains all the way toward the ocean with your finger.',
+        questions:[
+          {q:'How many blue river lines can you count on the map near your school?',map:'Zoom in to your area and count the blue stream and river lines you can find.',bloom:'Remembering'},
+          {q:'Which direction does water flow — toward the mountains or away from them?',map:'Follow a blue river line and see where it starts and where it goes.',bloom:'Understanding'}
+        ],
+        vocab:[{t:'Watershed',d:'All the land that drains rainwater to the same river or stream'},{t:'Pollution',d:'Harmful things that get into our water, air, or soil'},{t:'Stream',d:'A small river of moving water'},{t:'Filter',d:'Something that cleans water by removing dirt and other things'}],
+        concepts:['All water flows downhill to rivers, lakes, and oceans','Clean water is important for people, animals, and plants','What we put on the ground can end up in the water'],
+        discussion:['What are some ways we can keep water clean?','Why is it important to protect rivers and streams?'],
+        teacherNotes:'Use the filter demonstration to show how water can be cleaned naturally by soil. Connect to local rivers or streams students may know.',
+        realWorld:['Your drinking water comes from a watershed — nature\'s collection system','Picking up litter keeps pollution out of streams and rivers','Planting trees near streams helps filter water and prevents erosion'],
+        extensionMap:'Find the river or stream closest to your school on the map. What is its name?',
+        groupWork:'In small groups, use the filter activity to clean muddy water. Record what the filter collected and discuss where that material came from.',
+        formative:['Point to the watershed on a printed map and ask: where does rain on our school go?','Quick draw: show the path rainwater takes from a hill to a river'],
+        summative:'Draw your watershed and show where rain goes. Label the river and draw one way to keep it clean.',
+        exitQ:['Name one thing that can pollute a river.','What is one way you can help keep water clean?'],
+        rubric:['Identifies the local watershed on a map','Names at least one pollution source','Proposes one water protection action','Uses the word watershed correctly'],
+        ngss:[
+          {code:'K-ESS2-2',title:'Earth\'s Systems',desc:'Construct an argument supported by evidence for how plants and animals (and human activity) can change the environment.',cat:'PE'},
+          {code:'ESS2.C',title:'The Roles of Water',desc:'Water is found in oceans, rivers, lakes, and ponds. Water exists as solid ice and in liquid form.',cat:'DCI'},
+          {code:'SEP-6',title:'Constructing Explanations',desc:'Use information from observations and readings to construct an explanation.',cat:'SEP'},
+          {code:'CC-2',title:'Cause and Effect',desc:'Events have causes that generate observable patterns.',cat:'CC'}
+        ]
+      },
+      '3-5':{
+        hook:'Show a satellite image of a river delta with muddy brown water entering the ocean. Ask: "This brown color comes from upstream. What do you think it is carrying? Where did it start its journey?"',
+        priorQ:['What is a watershed?','How do you think pollution gets into rivers?','Where does your town\'s drinking water come from?'],
+        materials:['Watershed model tray and spray bottle','Food coloring to simulate pollutants','ArcGIS map access on tablets or computers'],
+        mapInstr:'Click on your city or town. The colored area around it is your watershed. Find the river your watershed drains into and trace it to where it ends.',
+        questions:[
+          {q:'What is the name of the watershed that includes your school?',map:'Click the watershed boundary layer and then click on your school\'s location.',bloom:'Remembering'},
+          {q:'How does land use in the upper watershed compare to land use near the river mouth?',map:'Toggle on the land cover layer and examine upstream vs. downstream areas.',bloom:'Analyzing'},
+          {q:'Which areas of your watershed do you predict have the worst water quality, and why?',map:'Use the land use and water quality monitoring station layers together.',bloom:'Evaluating'},
+          {q:'Propose two land use changes upstream that could improve downstream water quality.',map:'Identify the highest-pollution land use areas using the monitoring data layer.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Watershed',d:'A region of land where all precipitation drains to a common river or outlet'},{t:'Runoff',d:'Water that flows over the land surface into streams instead of soaking into the ground'},{t:'Groundwater',d:'Water that soaks into the ground and collects in underground aquifers'},{t:'Non-point source pollution',d:'Pollution that comes from many spread-out sources, like runoff from farms and roads'}],
+        concepts:['Watershed boundaries are determined by the shape of the land (topography)','Land use in a watershed directly affects water quality downstream','Both concentrated (point) and widespread (non-point) pollution sources affect water systems'],
+        discussion:['How did the map data confirm or challenge your predictions?','What surprised you most about your local watershed?'],
+        teacherNotes:'Connect the watershed model activity to real locations on the map. Have students find their school watershed and trace the water path.',
+        realWorld:['Farmers use cover crops and buffer strips to reduce nutrient runoff from fields','Cities build rain gardens and bioswales to filter stormwater before it reaches rivers','The EPA monitors thousands of water quality stations across the U.S. in real time'],
+        extensionMap:'Find a watershed that has both farms and cities. Compare the water quality monitoring data between those areas.',
+        groupWork:'Groups create a watershed map for an assigned region, identifying 3 pollution sources and 3 nature-based solutions using map evidence.',
+        formative:['Exit slip: draw the path of a raindrop from a farm field to the ocean','Pair share: explain what a watershed boundary is using the map'],
+        summative:'Create a watershed map for your community identifying at least 3 pollution sources and 3 proposed solutions with map-based justification.',
+        exitQ:['What is one pattern you found in the water quality map data?','How does land use upstream affect communities that live downstream?'],
+        rubric:['Correctly identifies watershed boundaries on the map','Names at least two types of pollution sources from map evidence','Connects land use to water quality outcomes','Proposes at least two realistic water quality improvement strategies'],
+        ngss:[
+          {code:'5-ESS2-1',title:'Earth\'s Systems',desc:'Represent data in graphical displays to reveal patterns of Earth\'s features.',cat:'PE'},
+          {code:'5-ESS3-1',title:'Earth & Human Activity',desc:'Obtain and combine information about ways individual communities use science ideas to protect Earth\'s resources.',cat:'PE'},
+          {code:'ESS2.C',title:'The Roles of Water',desc:'Nearly all of Earth\'s available water is in the ocean. Freshwater is found in rivers, lakes, groundwater, and glaciers.',cat:'DCI'},
+          {code:'CC-4',title:'Systems and System Models',desc:'A system can be described in terms of its components and their interactions.',cat:'CC'}
+        ]
+      },
+      '6-8':{
+        hook:'Display a map of a local watershed overlaid with land use data. Pose: "If a factory spills chemicals upstream, how far could contamination travel in 24 hours? How would you find out?"',
+        priorQ:['What is the water cycle?','How does land use affect water quality?','What are some measurable water quality indicators?'],
+        materials:['ArcGIS map access on computers','Water quality test strips for local water sample','Data recording and analysis worksheet'],
+        mapInstr:'Open the water quality monitoring layer and click on 5 different monitoring stations. Record the nitrate levels and the dominant land use type surrounding each station. Look for a pattern.',
+        questions:[
+          {q:'What is the average nitrate level at monitoring stations surrounded primarily by agricultural land?',map:'Filter monitoring stations by surrounding land use type shown in the layer legend.',bloom:'Analyzing'},
+          {q:'Identify the three monitoring stations with the worst water quality. What do they have in common geographically?',map:'Sort or compare monitoring stations by nitrate/pollutant concentration and examine their map locations.',bloom:'Analyzing'},
+          {q:'A new subdivision is proposed at the headwaters of your watershed. What downstream impacts would you predict?',map:'Trace the stream network from the proposed location downstream to the river outlet.',bloom:'Evaluating'},
+          {q:'Design a watershed restoration plan identifying 5 priority locations for wetland restoration.',map:'Overlay historical wetland loss data and current water quality data to find the highest-impact restoration sites.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Discharge',d:'The volume of water flowing past a specific point in a stream per unit time, usually measured in cubic feet per second'},{t:'Nitrate',d:'A nitrogen compound that pollutes water when excess fertilizers wash off farmland into streams'},{t:'Impervious surface',d:'Hard surfaces like pavement and rooftops that prevent water from soaking into the ground, increasing runoff'},{t:'Baseflow',d:'The portion of stream flow that comes from groundwater rather than direct surface runoff'}],
+        concepts:['The hydrologic cycle connects all water on Earth through evaporation, precipitation, and runoff','Human land use changes alter natural water flow patterns and degrade water quality','Geographic tools like GIS are essential for identifying patterns and sources of water pollution at the watershed scale'],
+        discussion:['How did the map data confirm or challenge your predictions about land use and water quality?','What would you do differently in designing a new community to protect the local watershed?'],
+        teacherNotes:'Compare monitoring station data to land use maps in real time during the Explain phase. Use the discharge data to demonstrate the relationship between impervious surfaces and flood peaks.',
+        realWorld:['The Gulf of Mexico Dead Zone is caused by nutrient runoff from the entire Mississippi River watershed — a 6,000 sq mile oxygen-depleted area','Water utilities spend billions of dollars per year treating water that has been polluted by upstream land use','The Chesapeake Bay restoration is one of the largest and most complex watershed management projects in world history'],
+        extensionMap:'Compare nitrate concentrations upstream and downstream of a major agricultural region. Quantify the difference and estimate the pollution load.',
+        groupWork:'Groups write a water quality report for an assigned sub-watershed, including a recommendation letter to the county water authority with map-based evidence.',
+        formative:['Review student data tables comparing monitoring station readings to land use','Exit ticket: explain the relationship between impervious surfaces and flooding using one piece of map evidence'],
+        summative:'Write a water quality report for your local watershed using ArcGIS data, including a recommendation letter to the county water authority with at least three data-supported suggestions.',
+        exitQ:['What is one pattern you found in the water quality monitoring data and what does it tell us about land use?','What is one unanswered question the map raised that you would want to investigate further?'],
+        rubric:['Cites specific nitrate or pollutant values from monitoring stations as evidence','Connects land use patterns to water quality outcomes using map data','Correctly applies all four vocabulary terms in context','Proposes watershed management strategies that address the specific patterns identified in the data'],
+        ngss:[
+          {code:'MS-ESS2-4',title:'Earth\'s Systems',desc:'Develop a model to describe the cycling of water through Earth\'s systems driven by energy from the sun and the force of gravity.',cat:'PE'},
+          {code:'MS-ESS3-3',title:'Earth & Human Activity',desc:'Apply scientific principles to design a method for monitoring and minimizing a human impact on the environment.',cat:'PE'},
+          {code:'ESS3.C',title:'Human Impacts on Earth\'s Systems',desc:'Human activities have significantly altered the biosphere. Changes to Earth\'s environments can have different impacts on different living things.',cat:'DCI'},
+          {code:'CC-6',title:'Structure and Function',desc:'The function of natural and designed systems may change with scale, number, speed, and amount of matter or energy.',cat:'CC'}
+        ]
+      },
+      '9-12':{
+        hook:'Present nitrate concentration data from a Midwest river over 30 years alongside agricultural expansion maps. Ask: "What story does this data tell about the relationship between human land use decisions and downstream water quality?"',
+        priorQ:['Explain how nitrogen and phosphorus biogeochemical cycles interact with freshwater systems.','What are the primary non-point source pollutants in agricultural watersheds, and why are they regulated differently?','How do wetlands function as natural water filtration systems at the landscape scale?'],
+        materials:['ArcGIS web map access on computers','Long-term water quality dataset for quantitative analysis','Graphing tools or spreadsheet software'],
+        mapInstr:'Compare nitrate concentrations at upstream versus downstream monitoring stations along the Mississippi River corridor. Overlay the agricultural land use layer. Attempt to quantify the relationship between crop coverage and nitrate loading.',
+        questions:[
+          {q:'Quantify the correlation between row crop agriculture percentage and nitrate concentration across 20 monitoring stations.',map:'Extract land use percentages and nitrate values from each monitoring station record.',bloom:'Analyzing'},
+          {q:'Evaluate the effectiveness of the Conservation Reserve Program by comparing water quality near enrolled and non-enrolled fields.',map:'Toggle the CRP enrollment layer and compare adjacent monitoring station data.',bloom:'Evaluating'},
+          {q:'Why do some highly agricultural watersheds have better water quality than others? What confounding variables appear in the data?',map:'Compare soil type, slope, riparian buffer, and wetland coverage layers across similar agricultural watersheds.',bloom:'Evaluating'},
+          {q:'Design a monitoring network expansion. Identify 5 new monitoring station locations that would fill critical data gaps.',map:'Map existing station coverage gaps against high-risk land use areas and stream network density.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Hydrograph',d:'A graph showing how stream discharge changes over time in response to precipitation events, used to analyze watershed response'},{t:'Eutrophication',d:'The process by which excess nutrients (nitrogen and phosphorus) cause algae blooms that deplete oxygen and degrade aquatic ecosystems'},{t:'Total Maximum Daily Load (TMDL)',d:'The maximum amount of a pollutant a water body can receive while still meeting water quality standards, set by the EPA'},{t:'Hypoxia',d:'A condition of critically low dissolved oxygen in water that kills aquatic life, often caused by nutrient pollution and subsequent algae decomposition'}],
+        concepts:['Nutrient loading from agriculture is the leading cause of water quality degradation in U.S. rivers and coastal zones','Watershed management requires navigating complex tradeoffs between economic productivity and ecological function','Remote sensing and GIS are now essential tools for monitoring water quality at regional and national scales'],
+        discussion:['How does the geographic scale of a watershed problem affect the difficulty of managing it?','What are the ethical and economic tensions between upstream agricultural communities and downstream water users?'],
+        teacherNotes:'Use the TMDL concept to bridge the regulatory framework to the scientific data students analyzed. The Chesapeake Bay TMDL is an excellent case study with publicly available data.',
+        realWorld:['The Clean Water Act has significantly improved point source pollution but continues to struggle with non-point source agricultural runoff','Satellite imagery and AI are now used to detect harmful algal blooms in lakes and reservoirs before they become crises','Precision agriculture technology can reduce fertilizer application by 20-30% while maintaining yields, but adoption is slow'],
+        extensionMap:'Develop a watershed vulnerability index combining nitrate loading, impervious surface percentage, flood frequency, and population exposure. Map and rank the 10 most vulnerable sub-watersheds.',
+        groupWork:'Teams develop a full watershed management plan with GIS-based analysis, quantified pollution reduction targets, and a cost-benefit framework for proposed interventions.',
+        formative:['Review quantitative analysis of monitoring station data for statistical reasoning accuracy','Peer review of draft watershed management plans using a structured scientific argumentation rubric'],
+        summative:'Develop a watershed management plan with GIS-based analysis, quantified pollution reduction targets, and cost-benefit analysis of at least three proposed interventions.',
+        exitQ:['What is one quantitative pattern you found in the watershed data and what does it reveal about land use impacts?','What is the most significant limitation of the available dataset for answering your research question?'],
+        rubric:['Quantifies relationships between land use and water quality using specific data values','Evaluates management strategies using cost, feasibility, and environmental impact criteria','Correctly applies TMDL, eutrophication, and hydrograph concepts in context','Identifies dataset limitations and proposes strategies to address monitoring gaps'],
+        ngss:[
+          {code:'HS-ESS2-5',title:'Earth\'s Systems',desc:'Plan and conduct an investigation of the properties of water and its effects on Earth materials and surface processes.',cat:'PE'},
+          {code:'HS-ESS3-6',title:'Earth & Human Activity',desc:'Use a computational representation to illustrate the relationships among Earth systems and how those relationships are being modified due to human activity.',cat:'PE'},
+          {code:'SEP-4',title:'Analyzing & Interpreting Data',desc:'Analyze data using tools, technologies, and/or models to make valid and reliable scientific claims or determine an optimal design solution.',cat:'SEP'},
+          {code:'CC-7',title:'Stability and Change',desc:'Feedback (negative or positive) can stabilize or destabilize a system. Systems in dynamic equilibrium are stable due to a balance of feedback mechanisms.',cat:'CC'}
+        ]
+      }
     }
-
-    const raw = data.content.map(i => i.text || '').join('');
-    console.log('Raw API response:', raw);
-    consoleLog('Response received (' + raw.length + ' chars). Parsing JSON...', 'info');
-
-    // Extract JSON — handle cases where model wraps in fences despite instructions
-    let jsonStr = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-    // Find first { to last } in case there's any stray text
-    const start = jsonStr.indexOf('{');
-    const end = jsonStr.lastIndexOf('}');
-    if (start === -1 || end === -1) throw new Error('No JSON object found in response');
-    jsonStr = jsonStr.slice(start, end + 1);
-
-    const lesson = JSON.parse(jsonStr);
-    currentLesson = lesson;
-
-    consoleLog('Lesson parsed successfully. Rendering...', 'success');
-    renderLesson(lesson);
-
-  } catch (err) {
-    clearInterval(msgInterval);
-    console.error('Lesson generation error:', err);
-    consoleLog('ERROR: ' + err.message, 'error');
-    // alert removed in favour of console
-    consoleLog('Full error: ' + err.stack, 'error');
-    alert(`Something went wrong: ${err.message}\n\nCheck the browser console for details.`);
-  } finally {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('generate-btn').disabled = false;
+  },
+  earthquake:{
+    keys:['earthquake','seismic','plate tectonic','fault','plate boundary','volcano','subduction','continental drift'],
+    label:'Plate Tectonics & Earthquakes',
+    domain:'Earth & Space Science',
+    mapUrl:'https://www.arcgis.com/apps/mapviewer/index.html?webmap=5b93e3c5aed74b0a98df6984b21f7da1',
+    mapLayers:['USGS Earthquake Hazards Program — Recent Earthquakes','USGS Quaternary Fault and Fold Database','Global Tectonic Plate Boundaries'],
+    mapDesc:'USGS real-time earthquake data, global tectonic plate boundaries, and fault line database showing the relationship between plate tectonics and seismic hazard.',
+    data:{
+      'K-2':{
+        hook:'Show a puzzle of the world map and let students notice how the continents fit together like puzzle pieces. Ask: "What do you notice about the shapes of these land masses? Could they have once been connected?"',
+        priorQ:['Have you ever felt the ground shake?','What do you think the inside of the Earth looks like?','Have you seen pictures of a volcano?'],
+        materials:['World map continent puzzle','Classroom globe','Crayons and drawing paper'],
+        mapInstr:'Find the red and orange dots on the map. Each dot is a place where the ground shook recently. Find the biggest dot you can see.',
+        questions:[
+          {q:'How many earthquake dots can you find near the edges of the land on the map?',map:'Look at where the ocean meets the land — where do you see the most colored dots?',bloom:'Remembering'},
+          {q:'Can you find an earthquake dot near where you live?',map:'Type your city in the search bar and zoom in to look for any dots nearby.',bloom:'Understanding'}
+        ],
+        vocab:[{t:'Earthquake',d:'When the ground shakes because rocks deep underground suddenly move'},{t:'Volcano',d:'A mountain that can erupt, shooting out hot melted rock and ash'},{t:'Plates',d:'Giant pieces of rock that make up Earth\'s outer layer and slowly move'},{t:'Fault',d:'A crack in Earth\'s crust where rocks on either side can move'}],
+        concepts:['Earth\'s surface is made of huge moving pieces called tectonic plates','Earthquakes happen when plates move suddenly along a fault','Volcanoes and earthquakes often happen in the same places near plate edges'],
+        discussion:['What would you do if you felt the ground shaking?','Why do scientists study earthquakes?'],
+        teacherNotes:'Use the continent puzzle to build intuition about plate movement. Connect to local earthquake history if applicable.',
+        realWorld:['Earthquake drills in schools help students know what to do if the ground shakes','Buildings in earthquake zones are specially designed to sway without falling','Scientists watch volcanoes closely to warn people before eruptions happen'],
+        extensionMap:'Find the Pacific Ring of Fire on the map. How many earthquake dots can you count around the edges of the Pacific Ocean?',
+        groupWork:'In pairs, build a model of two plates colliding using clay or foam blocks and predict what would happen at the boundary.',
+        formative:['Point to a dot on the map: what does this dot mean?','Quick draw: show where earthquake dots appear most on a simplified world map'],
+        summative:'Draw Earth with plates and show where earthquakes and volcanoes happen. Add one earthquake safety rule.',
+        exitQ:['Where do most earthquakes happen on Earth?','Name one thing to do during an earthquake.'],
+        rubric:['Correctly locates earthquakes near plate boundaries on the map','Names one safety action for earthquakes','Uses the words earthquake and plate correctly','Identifies the Ring of Fire location'],
+        ngss:[
+          {code:'K-ESS2-2',title:'Earth\'s Systems',desc:'Construct an argument supported by evidence for how geologic events can change the environment.',cat:'PE'},
+          {code:'ESS1.C',title:'The History of Planet Earth',desc:'Some events on Earth occur very slowly and some occur very quickly. Earthquakes and volcanoes can change the landscape rapidly.',cat:'DCI'},
+          {code:'SEP-1',title:'Asking Questions',desc:'Ask questions based on observations to find more information about the natural and designed world.',cat:'SEP'},
+          {code:'CC-1',title:'Patterns',desc:'Patterns in the natural world can be observed and used to describe phenomena.',cat:'CC'}
+        ]
+      },
+      '3-5':{
+        hook:'Show a world map with earthquake and volcano locations marked as dots. Ask: "What pattern do you see? Why do you think earthquakes and volcanoes happen in those specific places and not others?"',
+        priorQ:['What do you know about earthquakes?','Have you heard of tectonic plates?','Why do you think volcanoes and earthquakes often happen in the same places?'],
+        materials:['Printed world map with blank boundaries','Colored dot stickers for earthquake plotting','ArcGIS map access for exploration'],
+        mapInstr:'Click on 5 earthquake dots on the map. For each one, record: the location, the magnitude number, and whether it is near land or ocean.',
+        questions:[
+          {q:'Name three countries or ocean regions where you see the most earthquake dots.',map:'Zoom out to see the whole world and look for clusters of dots.',bloom:'Remembering'},
+          {q:'Do earthquakes follow a pattern on the map? Turn on the plate boundary layer and describe what you see.',map:'Toggle on the tectonic plate boundary layer and compare it to the earthquake dot locations.',bloom:'Analyzing'},
+          {q:'Why do you think there are so few earthquakes in the middle of the continents?',map:'Find the plate boundaries and look at regions that are far from any boundary line.',bloom:'Evaluating'},
+          {q:'Design the safest city location using what you learned from the map.',map:'Find a region with very few earthquake dots and explain your reasoning for choosing it.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Tectonic plates',d:'The large sections of Earth\'s crust that float on the mantle and move very slowly'},{t:'Magnitude',d:'A number that measures how much energy an earthquake releases — each whole number is 10 times more energy'},{t:'Epicenter',d:'The point on Earth\'s surface directly above where an earthquake starts underground'},{t:'Ring of Fire',d:'A horseshoe-shaped region around the Pacific Ocean where most of Earth\'s earthquakes and volcanoes occur'}],
+        concepts:['Tectonic plates move very slowly but cause huge changes over millions of years','The Ring of Fire marks the boundary of the Pacific plate where it meets other plates','Scientists use seismographs to detect and measure earthquake waves around the world'],
+        discussion:['How did the map patterns confirm or surprise you?','Why is it important to know where earthquakes are likely to happen?'],
+        teacherNotes:'Connect the pattern students see on the map directly to the plate boundary layer. The visual alignment is the key insight of this lesson.',
+        realWorld:['The 2011 Japan earthquake was so powerful it moved the entire island of Honshu 8 feet eastward','Scientists at USGS monitor earthquakes in real time from thousands of sensors worldwide','ShakeAlert is an earthquake early warning system being built for the U.S. West Coast'],
+        extensionMap:'Find the San Andreas Fault in California on the map. Click on recent earthquakes nearby. How many happened in the last month?',
+        groupWork:'Groups create an illustrated poster explaining plate boundaries using evidence from their map exploration and at least 3 specific earthquake examples.',
+        formative:['Map check: student can point to the Ring of Fire and explain why earthquakes cluster there','Pair share: explain what tectonic plates are using an analogy'],
+        summative:'Create an illustrated guide to plate boundaries showing where earthquakes and volcanoes occur and why, using evidence from the map activity to support your explanations.',
+        exitQ:['Where do most earthquakes on Earth occur, and why?','What is one thing the earthquake map taught you that you did not know before?'],
+        rubric:['Correctly identifies the Ring of Fire on the map','Explains the relationship between plate boundaries and earthquake locations','Uses magnitude and epicenter correctly in written or oral explanation','Designs a safer community location with map-based justification'],
+        ngss:[
+          {code:'4-ESS2-2',title:'Earth\'s Systems',desc:'Analyze and interpret data from maps to describe patterns of Earth\'s features.',cat:'PE'},
+          {code:'4-ESS3-2',title:'Natural Hazards',desc:'Generate and compare multiple solutions to reduce the impacts of natural Earth processes on humans.',cat:'PE'},
+          {code:'ESS2.B',title:'Plate Tectonics and Large-Scale System Interactions',desc:'The locations of mountain ranges, deep ocean trenches, volcanoes, and earthquakes occur in patterns. Most are located at the boundaries between the rocky plates.',cat:'DCI'},
+          {code:'CC-1',title:'Patterns',desc:'Similarities and differences in patterns can be used to sort, classify, and analyze rates of change for natural phenomena.',cat:'CC'}
+        ]
+      },
+      '6-8':{
+        hook:'Display a cross-section diagram of a subduction zone. Pose: "What happens when two of Earth\'s giant rocky plates collide? How do scientists know what is happening miles underground where no one can see?"',
+        priorQ:['What is the difference between Earth\'s crust, mantle, and core?','What causes tectonic plates to move?','How is earthquake magnitude measured and what does each unit represent?'],
+        materials:['ArcGIS map access on computers or tablets','Seismic data analysis worksheet','Colored pencils for cross-section annotation'],
+        mapInstr:'Zoom to the Pacific Ring of Fire. Toggle the plate boundary layer on. Click on 10 earthquakes near a subduction zone and compare their depth and magnitude to 5 earthquakes in the interior of a plate.',
+        questions:[
+          {q:'What is the relationship between earthquake depth and tectonic plate boundary type?',map:'Filter earthquakes by depth category (shallow 0-70km, intermediate 70-300km, deep 300km+) and compare their locations relative to boundary types.',bloom:'Analyzing'},
+          {q:'Compare earthquake frequency near the San Andreas Fault to the Cascadia Subduction Zone. Which poses a greater long-term hazard?',map:'Zoom to each fault zone and examine earthquake clustering, magnitude distribution, and historical record.',bloom:'Evaluating'},
+          {q:'Identify 3 cities with populations over 1 million that sit within 50 km of a major active fault. Rank them by apparent seismic risk.',map:'Overlay population data and the fault database, then examine earthquake history for each city location.',bloom:'Evaluating'},
+          {q:'Propose a national earthquake monitoring network expansion. Which 4 regions need the most additional seismometers?',map:'Identify high-seismic-risk zones with limited monitoring station coverage by overlaying both layers.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Subduction zone',d:'A convergent plate boundary where one tectonic plate slides beneath another and sinks into the mantle'},{t:'Seismic wave',d:'A wave of energy released by an earthquake or explosion that travels through Earth\'s interior'},{t:'Transform boundary',d:'A plate boundary where two plates slide horizontally past each other, creating faults like the San Andreas'},{t:'Moment magnitude scale',d:'The current standard scale for measuring earthquake size, based on the total energy released rather than ground shaking alone'}],
+        concepts:['Different plate boundary types — convergent, divergent, and transform — produce different types of earthquakes and geologic features','Seismic wave data can be used to map Earth\'s interior structure since waves travel at different speeds through different materials','Earthquake magnitude and intensity are fundamentally different measures that assess different aspects of seismic events'],
+        discussion:['How does the geographic pattern of earthquakes on the map reflect what we know about plate boundary types?','What additional data would make earthquake hazard assessment more precise and useful for communities?'],
+        teacherNotes:'The depth versus boundary type relationship is the critical insight. Use the cross-section diagram alongside the map to show why deep earthquakes occur at subduction zones.',
+        realWorld:['The Cascadia Subduction Zone is capable of producing a magnitude 9.0 earthquake that would affect the entire Pacific Northwest coast','Japan has the world\'s most advanced earthquake early warning system, providing up to 30 seconds of warning before shaking arrives','Wastewater injection from oil and gas operations has caused a dramatic increase in earthquakes in Oklahoma and Texas'],
+        extensionMap:'Compare the seismic hazard of two cities near different types of plate boundaries. Use depth, magnitude, and frequency data from the map to support your analysis.',
+        groupWork:'Groups analyze a real major historical earthquake using the map, write a USGS-style hazard summary, and present their findings including location, boundary type, and community impact.',
+        formative:['Exit ticket: identify the type of plate boundary from a described earthquake depth and location','Map review: teacher checks student earthquake data tables for accuracy of depth and boundary type classification'],
+        summative:'Write a USGS-style hazard report for your region: identify the nearest active fault, analyze historical seismicity from the ArcGIS map, and estimate relative risk for your community.',
+        exitQ:['Explain the relationship between plate boundary type and earthquake depth using one specific example from the map.','What is one way the map data changed how you think about where you live?'],
+        rubric:['Correctly identifies plate boundary types from earthquake depth and location data','Compares seismic hazard across multiple locations using specific data values','Applies subduction zone, seismic wave, and transform boundary concepts accurately','Proposes a monitoring network expansion with data-based spatial reasoning'],
+        ngss:[
+          {code:'MS-ESS2-2',title:'Earth\'s Systems',desc:'Construct an explanation based on evidence for how geoscience processes have changed Earth\'s surface at varying time and spatial scales.',cat:'PE'},
+          {code:'MS-ESS2-3',title:'Earth\'s Systems',desc:'Analyze and interpret data on the distribution of fossils, rocks, continental shapes, and seafloor structures to provide evidence of past plate motions.',cat:'PE'},
+          {code:'ESS2.B',title:'Plate Tectonics',desc:'Maps of ancient and current patterns show gradual continent movement. Plate tectonics is the unifying theory explaining mountains, volcanoes, and earthquakes.',cat:'DCI'},
+          {code:'CC-4',title:'Systems and System Models',desc:'Models can be used to represent systems and their interactions, and may be used to predict the behavior of a system.',cat:'CC'}
+        ]
+      },
+      '9-12':{
+        hook:'Present a graph of seismic wave travel times from a major earthquake recorded at stations around the world. Ask: "How do scientists use waves that travel through Earth\'s interior to figure out what Earth looks like thousands of kilometers underground — a place no human has ever visited?"',
+        priorQ:['Explain the mechanism driving tectonic plate motion at the mantle scale.','What is the relationship between seismic wave velocity and Earth\'s interior composition and state?','How does the age distribution of oceanic crust provide evidence for seafloor spreading?'],
+        materials:['ArcGIS web map access on computers','Seismic wave travel time data for quantitative analysis','Graphing and analysis worksheet'],
+        mapInstr:'Analyze earthquake distribution along three different subduction zones. Compare the dip angle, depth distribution of earthquakes, and magnitude frequency for Cascadia, Japan, and Peru-Chile subduction zones.',
+        questions:[
+          {q:'Quantify the relationship between subduction rate and earthquake frequency using data from 3 different subduction zones.',map:'Use the plate motion vectors layer and earthquake density analysis for Cascadia, Japan, and Peru-Chile zones.',bloom:'Analyzing'},
+          {q:'Evaluate the seismic hazard of the New Madrid Seismic Zone compared to the San Andreas Fault using all available historical data.',map:'Compare earthquake frequency distributions, depth profiles, and magnitude histograms for both zones.',bloom:'Evaluating'},
+          {q:'Why does the Himalayan region produce large earthquakes but far fewer tsunamis than the Pacific Ring of Fire?',map:'Compare crustal type (continental vs. oceanic) and plate boundary geometry at each location using the boundary layer.',bloom:'Evaluating'},
+          {q:'Design a probabilistic seismic hazard analysis framework for a 500 km radius around your school.',map:'Integrate fault proximity, historical seismicity density, and soil amplification layers into a composite risk index.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Wadati-Benioff zone',d:'The planar zone of seismicity defined by intermediate and deep earthquakes within a subducting oceanic plate, defining the subduction geometry'},{t:'Seismic moment',d:'A measure of the total energy released in an earthquake based on the fault area, slip distance, and rock rigidity — the basis of the moment magnitude scale'},{t:'Mantle convection',d:'The slow, thermally driven circulation of the solid mantle that transfers heat from Earth\'s interior and drives plate motion over geologic timescales'},{t:'Fault creep',d:'Slow, continuous aseismic movement along a fault that releases strain gradually without producing large earthquakes'}],
+        concepts:['Plate tectonics is the unifying theory that explains the geographic distribution of earthquakes, volcanoes, mountain ranges, and ocean basins','Probabilistic seismic hazard analysis combines fault geometry, slip rates, and soil conditions to estimate the likelihood of damaging ground motion','Real-time GPS networks now measure plate motion and interseismic strain accumulation with millimeter precision, revolutionizing earthquake science'],
+        discussion:['How does the spatial resolution of the earthquake dataset affect the quality of hazard assessment you can perform?','What are the societal implications of improving earthquake early warning systems by even 10 seconds?'],
+        teacherNotes:'Use the quantitative comparison of subduction zones to demonstrate how scientific inference works from patterns in large datasets. Connect the Wadati-Benioff zone concept to the depth distributions students observe.',
+        realWorld:['InSAR satellite technology can measure ground deformation from earthquakes and volcanic unrest at millimeter scale from orbit','The 2004 Sumatra earthquake was so energetic it measurably changed the length of Earth\'s day by 2.68 microseconds','Induced seismicity from wastewater injection has become a significant regulatory and scientific challenge in oil-producing states'],
+        extensionMap:'Develop a seismic hazard ranking for the 10 largest cities within 200 km of your location, using fault proximity, historical seismicity, and soil amplification data from the map.',
+        groupWork:'Teams produce a professional seismic hazard assessment brief for a proposed major infrastructure project, integrating all relevant map data layers into a quantitative risk ranking with uncertainty bounds.',
+        formative:['Peer review of quantitative subduction zone analysis using a structured scientific argumentation rubric','Teacher conference on probabilistic reasoning and appropriate use of uncertainty in hazard estimates'],
+        summative:'Develop a seismic hazard assessment for a proposed major infrastructure project, integrating fault data, soil conditions, and historical seismicity from ArcGIS, with quantified risk estimates and uncertainty bounds.',
+        exitQ:['What is one quantitative pattern in the earthquake data that you can now explain using plate tectonic theory?','What is the most significant source of uncertainty in your seismic hazard analysis, and how would you reduce it?'],
+        rubric:['Quantifies earthquake frequency and magnitude relationships across different tectonic settings','Integrates multiple data layers into a coherent probabilistic risk framework','Applies Wadati-Benioff zone, seismic moment, and mantle convection concepts accurately','Identifies and quantifies uncertainty sources in the hazard analysis'],
+        ngss:[
+          {code:'HS-ESS1-5',title:'Earth\'s Place in the Universe',desc:'Evaluate evidence of the past and current movements of continental and oceanic crust and the theory of plate tectonics to explain the ages of crustal rocks.',cat:'PE'},
+          {code:'HS-ESS2-1',title:'Earth\'s Systems',desc:'Develop a model to illustrate how Earth\'s internal and surface processes operate at different spatial and temporal scales to form continental and ocean-floor features.',cat:'PE'},
+          {code:'SEP-4',title:'Analyzing & Interpreting Data',desc:'Analyze data using computational tools to make valid and reliable scientific claims, including assessment of sources of uncertainty.',cat:'SEP'},
+          {code:'CC-1',title:'Patterns',desc:'Empirical evidence is needed to differentiate between cause and correlation and to make claims about specific causes and effects in complex systems.',cat:'CC'}
+        ]
+      }
+    }
+  },
+  ecosystem:{
+    keys:['ecosystem','food web','food chain','biome','habitat','biodiversity','population','predator','prey','decomposer','producer','consumer'],
+    label:'Ecosystems & Food Webs',
+    domain:'Life Science',
+    mapUrl:'https://www.arcgis.com/apps/mapviewer/index.html?webmap=86265e5a4bbb4187a59719cf134e0018',
+    mapLayers:['Global Biomes and Ecoregions (WWF)','IUCN Protected Areas Network','Global Species Richness and Biodiversity Hotspots'],
+    mapDesc:'Global biome and ecoregion boundaries, protected area networks, and species richness data showing ecosystem distribution and global biodiversity patterns.',
+    data:{
+      'K-2':{
+        hook:'Show a photo of a forest with several animals visible. Ask: "All these living things are connected to each other. If all the rabbits disappeared, what do you think would happen to the foxes? To the plants?"',
+        priorQ:['What do animals eat?','Where do plants get their food?','What happens to animals and plants when they die?'],
+        materials:['Animal and plant picture cards for food web building','Yarn or string to connect organisms','Crayons and large drawing paper'],
+        mapInstr:'Find the different colors on the map — each color is a different type of place where plants and animals live. Find the color that matches the forests or fields near your home.',
+        questions:[
+          {q:'What color is the rainforest on the map?',map:'Find South America and look for the large green area near the middle of the map (the equator).',bloom:'Remembering'},
+          {q:'Where would a polar bear live on the map?',map:'Zoom to the very top of the map (the Arctic) and find the white and light blue colored areas.',bloom:'Understanding'}
+        ],
+        vocab:[{t:'Producer',d:'A living thing like a plant that makes its own food using sunlight'},{t:'Consumer',d:'An animal that eats other living things to get energy'},{t:'Food chain',d:'The order showing who eats whom in nature'},{t:'Habitat',d:'The place where an animal or plant naturally lives and finds everything it needs'}],
+        concepts:['All living things need food, water, and a safe place to live','Plants make their own food using sunlight and water','Animals depend on plants or other animals for food and energy'],
+        discussion:['What would happen to a rabbit if all the grass in its field disappeared?','Why do we need to protect animal habitats?'],
+        teacherNotes:'Use the yarn food web activity to make connections tangible. When one organism is removed (yarn dropped), students feel the web become unstable.',
+        realWorld:['Bees pollinate the plants that produce our fruits and vegetables — without bees, many foods would disappear','When forests are cut down, animals lose their homes and food sources','Parks and nature reserves protect habitats so wild animals can survive'],
+        extensionMap:'Find a desert on the map. What color is it? Name one animal you think could live there.',
+        groupWork:'Groups use picture cards to build a food web with at least 6 organisms, then predict what would happen if one organism were removed.',
+        formative:['Hold up a card: is this a producer or consumer?','Quick draw: draw a food chain with 3 organisms and arrows showing who eats whom'],
+        summative:'Draw a food web with at least 4 animals and plants. Show who eats whom with arrows pointing from the food to the eater.',
+        exitQ:['Name one producer and one consumer from today\'s lesson.','What would happen to a hawk if all the mice disappeared?'],
+        rubric:['Correctly distinguishes producers from consumers','Draws a food chain or web with accurate directional arrows','Names the habitat of at least one organism from the map','Predicts one consequence of removing an organism from the web'],
+        ngss:[
+          {code:'K-LS1-1',title:'From Molecules to Organisms',desc:'Use observations to describe patterns of what plants and animals need to survive.',cat:'PE'},
+          {code:'LS1.C',title:'Organization for Matter and Energy Flow',desc:'All animals need food to live and grow. Plants need water and light to live and grow.',cat:'DCI'},
+          {code:'SEP-8',title:'Obtaining & Evaluating Information',desc:'Read grade-appropriate texts and use media to obtain scientific information to determine patterns in the natural world.',cat:'SEP'},
+          {code:'CC-1',title:'Patterns',desc:'Patterns in the natural world can be observed, used to describe phenomena, and used as evidence.',cat:'CC'}
+        ]
+      },
+      '3-5':{
+        hook:'Hold up three objects: a leaf, a grasshopper, and a picture of a hawk. Ask: "How are these three things connected to each other? What would happen to each one if we removed it from the system?"',
+        priorQ:['What is a food chain?','What is the difference between a producer and a consumer?','What do decomposers do, and why are they important?'],
+        materials:['Ecosystem food web card set','ArcGIS map access for biome exploration','Data recording sheet for map investigation'],
+        mapInstr:'Click on 4 different biome regions on the map. For each one, record: the biome name, the approximate temperature range, and one example animal you think might live there.',
+        questions:[
+          {q:'Which biome appears to cover the most land area on Earth?',map:'Compare the sizes of different colored biome regions across the entire world map.',bloom:'Remembering'},
+          {q:'Why do deserts tend to be found at about 30 degrees north and south of the equator?',map:'Find all the desert-colored regions and use the latitude grid lines to identify their common latitude.',bloom:'Analyzing'},
+          {q:'Identify a biodiversity hotspot that appears to have little or no protection from the protected areas layer.',map:'Overlay both the biodiversity hotspot and protected areas layers and look for unprotected hotspot regions.',bloom:'Evaluating'},
+          {q:'Design a new protected area to cover the largest unprotected biodiversity hotspot you can find.',map:'Use the measurement tool to estimate the area needed and cite species richness data to justify your choice.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Ecosystem',d:'All the living and non-living things in an area and the ways they interact with each other'},{t:'Food web',d:'A diagram showing all the feeding connections between organisms in an ecosystem'},{t:'Decomposer',d:'An organism such as fungi or bacteria that breaks down dead things and recycles nutrients back to the soil'},{t:'Biodiversity',d:'The variety of different living things found in an area — more biodiversity generally means a healthier ecosystem'}],
+        concepts:['Energy flows from producers through consumers in a food web, with energy lost at each step','Decomposers are essential because they recycle nutrients that producers need to grow','Removing one species from a food web can cause unexpected changes throughout the whole ecosystem'],
+        discussion:['How did the map data help you understand why different biomes exist in different locations?','What would happen to your local ecosystem if one key species disappeared?'],
+        teacherNotes:'Use the 10% energy rule to explain why food chains are typically short. Have students calculate how much plant matter is needed to support one hawk.',
+        realWorld:['Wolf reintroduction in Yellowstone National Park in 1995 changed the whole ecosystem, including river paths and bank vegetation','The passenger pigeon went extinct due to overhunting — 5 billion birds were gone within decades','Coral reefs support approximately 25% of all marine species despite covering less than 1% of the ocean floor'],
+        extensionMap:'Find a biodiversity hotspot that is not fully protected. Calculate what percentage of its area falls inside protected boundaries.',
+        groupWork:'Groups create an ecosystem field guide for an assigned biome using map data, describing 5 organisms and all their food web connections.',
+        formative:['Quick quiz: identify producer, primary consumer, secondary consumer from a food web diagram','Map annotation check: teacher reviews student biome data tables for accuracy'],
+        summative:'Create a field guide to your local ecosystem using map data, showing 5 organisms and all their food web connections with explanations of each relationship.',
+        exitQ:['Name one way that removing a species from an ecosystem could cause unexpected effects elsewhere in the food web.','What biome has the highest biodiversity, and why do you think that is?'],
+        rubric:['Correctly identifies trophic levels in a food web diagram','Uses map data to justify biome characteristics and organism selections','Explains the consequence of removing one organism using food web reasoning','Proposes a conservation area with map-based species richness evidence'],
+        ngss:[
+          {code:'5-LS2-1',title:'Ecosystems',desc:'Develop a model to describe the movement of matter among plants, animals, decomposers, and the environment.',cat:'PE'},
+          {code:'3-LS4-4',title:'Biological Evolution',desc:'Make a claim about the merit of a solution to a problem caused when the environment changes and the types of organisms that live there change.',cat:'PE'},
+          {code:'LS2.B',title:'Cycles of Matter and Energy Transfer',desc:'Matter cycles between the air and soil and among plants, animals, and microbes as these organisms live and die. Organisms obtain gases and water from the environment.',cat:'DCI'},
+          {code:'CC-4',title:'Systems and System Models',desc:'A system can be described in terms of its components and their interactions. Systems in nature can be modeled.',cat:'CC'}
+        ]
+      },
+      '6-8':{
+        hook:'Present population graphs for wolves and elk in Yellowstone National Park before and after wolf reintroduction in 1995. Pose: "What changed when wolves returned after 70 years of absence? Why did even the rivers change?"',
+        priorQ:['What is a trophic level and how does energy transfer between levels?','What is a keystone species and how does its removal affect an ecosystem?','How does matter cycle through an ecosystem differently from energy?'],
+        materials:['ArcGIS map access on computers','Ecosystem population dynamics worksheet','Graph paper for quantitative analysis'],
+        mapInstr:'Open the biodiversity hotspot layer and the protected areas layer. Identify at least 3 regions where biodiversity hotspots overlap with protected areas, and at least 2 where they do not. Record specific locations.',
+        questions:[
+          {q:'What percentage of global terrestrial biodiversity hotspots are currently within protected area boundaries?',map:'Compare the spatial extent of hotspot areas with the protected areas layer coverage.',bloom:'Analyzing'},
+          {q:'Which biome type shows the highest species richness per unit area based on the map data?',map:'Compare species richness data values with the biome classification layer for different ecosystem types.',bloom:'Analyzing'},
+          {q:'A new highway is proposed through the Amazon Basin. Using map data, identify the three most ecologically sensitive sections of the route.',map:'Overlay species richness, fragmentation index, and protected area layers along the proposed route corridor.',bloom:'Evaluating'},
+          {q:'Design a wildlife corridor connecting two isolated protected areas in a region of your choice.',map:'Identify suitable remnant habitat between two isolated reserves and use the measurement tool to assess corridor feasibility.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Trophic level',d:'The position of an organism in a food chain or web, defined by how many energy transfers separate it from the primary producers'},{t:'Keystone species',d:'A species that has an unusually large effect on its ecosystem relative to its own abundance — its removal causes disproportionate change'},{t:'Carrying capacity',d:'The maximum population size of a species that a given environment can sustainably support over time'},{t:'Biomass',d:'The total mass of living organisms in a given area or trophic level, typically decreasing at each successive level'}],
+        concepts:['Only about 10% of energy is transferred from one trophic level to the next, which limits the length of food chains and the number of apex predators an ecosystem can support','Keystone species like wolves, sea otters, and elephants regulate ecosystem structure through trophic cascades that extend far beyond their direct interactions','Biodiversity increases ecosystem resilience — more diverse ecosystems recover more quickly from disturbance'],
+        discussion:['How did the Yellowstone wolf reintroduction data connect to the trophic cascade concept?','What does the map reveal about the adequacy of current global conservation efforts?'],
+        teacherNotes:'The Yellowstone trophic cascade is the anchor story for this phase. Use the before/after population data alongside the map to show how spatial tools enhance ecological understanding.',
+        realWorld:['The loss of sea otters from the California coast caused a kelp forest collapse that affected hundreds of species in a trophic cascade','Invasive species cause over $120 billion in economic damage per year in the U.S. and are the second leading cause of biodiversity loss worldwide','The Amazon rainforest produces an estimated 20% of Earth\'s oxygen and regulates continental precipitation patterns'],
+        extensionMap:'Compare biodiversity metrics for two regions of similar size but different protection levels. Quantify the difference in species richness and identify which threatened species are at highest risk.',
+        groupWork:'Groups write an ecological impact assessment for a proposed development in a local or regional natural area, using biodiversity and habitat connectivity data from the ArcGIS map.',
+        formative:['Review student analysis of species richness data tables for accuracy of percent calculations','Exit ticket: explain what a trophic cascade is using one specific example from today\'s map exploration'],
+        summative:'Write an ecological impact assessment for a proposed development in a local natural area, using biodiversity and habitat data from ArcGIS, with at least three evidence-based recommendations.',
+        exitQ:['Explain what a trophic cascade is using a specific example from today\'s lesson or your map exploration.','What is one gap in current global conservation coverage that the map revealed?'],
+        rubric:['Correctly calculates or estimates energy transfer efficiency between trophic levels','Uses species richness and hotspot data from the map as specific quantitative evidence','Applies keystone species, trophic cascade, and carrying capacity concepts in context','Designs a conservation strategy that addresses specific geographic gaps identified in the map data'],
+        ngss:[
+          {code:'MS-LS2-3',title:'Ecosystems',desc:'Develop a model to describe the cycling of matter and flow of energy among living and nonliving parts of an ecosystem.',cat:'PE'},
+          {code:'MS-LS2-4',title:'Ecosystems',desc:'Construct an argument supported by empirical evidence that changes to physical or biological components of an ecosystem affect populations.',cat:'PE'},
+          {code:'LS2.C',title:'Ecosystem Dynamics, Functioning & Resilience',desc:'Ecosystems are dynamic; their characteristics vary over time. Disruptions to any physical or biological component can lead to shifts in all populations.',cat:'DCI'},
+          {code:'CC-5',title:'Energy and Matter',desc:'Energy may take different forms. The transfer of energy drives the motion and cycling of matter within and between systems.',cat:'CC'}
+        ]
+      },
+      '9-12':{
+        hook:'Show coral reef photos from 1980 and today from the same location. Ask: "This reef lost 50% of its coral cover in 40 years. Using ecological principles you know, predict what the next 40 years look like without significant intervention — and what intervention would you prioritize?"',
+        priorQ:['Explain the difference between gross and net primary productivity and what controls each.','What is a trophic cascade, and how does the concept of indirect effects extend beyond direct predator-prey relationships?','How do biogeochemical cycles (carbon, nitrogen, phosphorus) interact with ecosystem structure and function?'],
+        materials:['ArcGIS web map access on computers','Long-term ecosystem monitoring dataset for quantitative analysis','Statistical analysis tools or spreadsheet software'],
+        mapInstr:'Analyze species richness data across a latitudinal gradient from the equator to 60 degrees North. Sample at least 10 points at equal latitude intervals. Graph the pattern and develop a quantitative hypothesis.',
+        questions:[
+          {q:'Quantify the latitudinal biodiversity gradient using species richness values at 10 points from the equator to 60 degrees North.',map:'Extract species richness values from the map at equal latitude intervals along a single longitude line.',bloom:'Analyzing'},
+          {q:'Evaluate the effectiveness of the current global protected area network in proportionally covering all major biome types.',map:'Calculate the percentage of each biome type that falls within protected area boundaries using the map layers.',bloom:'Evaluating'},
+          {q:'Why do island ecosystems show disproportionately high rates of endemic species and also disproportionately high extinction rates?',map:'Compare species richness, endemism index, and threat levels for island versus continental regions of comparable area.',bloom:'Evaluating'},
+          {q:'Design a 30x30 conservation expansion strategy for your country, prioritizing areas by ecological return per unit cost.',map:'Integrate species richness, current threat level, habitat connectivity, and estimated protection cost data layers.',bloom:'Creating'}
+        ],
+        vocab:[{t:'Net primary productivity',d:'The rate at which plants produce organic matter available to consumers, calculated as gross primary productivity minus plant respiration — the foundation of all ecosystem energy budgets'},{t:'Trophic cascade',d:'Indirect ecological effects that propagate through a food web when the abundance of an apex predator changes, altering the structure and function of entire ecosystems'},{t:'Ecological resilience',d:'The capacity of an ecosystem to absorb disturbance and reorganize while undergoing change so as to retain essentially the same function and structure'},{t:'Edge effect',d:'The ecological phenomenon where species diversity and abundance change significantly at the boundary between two habitat types, with implications for fragmented landscapes'}],
+        concepts:['Net primary productivity sets the absolute upper limit on ecosystem biomass and the energy available to all consumer populations','Trophic cascades reveal that ecosystems are often regulated from the top down by apex predators, not only from the bottom up by primary productivity','Island biogeography theory quantitatively predicts species richness as a function of island area and isolation, with major implications for habitat fragment conservation design'],
+        discussion:['How does the quantitative latitudinal gradient pattern connect to the evolutionary and ecological mechanisms hypothesized to explain it?','What are the ethical and political dimensions of setting aside 30% of land and ocean for conservation by 2030?'],
+        teacherNotes:'The latitudinal biodiversity gradient is one of ecology\'s most robust empirical patterns and one of its longest-standing unsolved mechanistic puzzles. Use this tension to model scientific uncertainty.',
+        realWorld:['The IPBES Global Assessment reports that approximately 1 million species currently face extinction, at rates 10-100 times higher than the natural background rate','Rewilding projects in Europe are reintroducing apex predators including wolves, lynx, and bison to restore trophic cascade effects in degraded landscapes','Environmental DNA (eDNA) sampling now allows detection of rare or cryptic species from water or soil samples without directly observing the organism'],
+        extensionMap:'Develop a quantitative biodiversity vulnerability index combining species richness, endemism, threat level, and protection gap. Identify and rank the 5 highest-priority conservation regions globally.',
+        groupWork:'Teams develop a scientifically rigorous rewilding proposal for a degraded ecosystem, quantifying expected trophic cascade effects and designing a long-term monitoring plan using ArcGIS spatial tools.',
+        formative:['Peer review of quantitative latitudinal gradient analysis for statistical reasoning and appropriate interpretation of ecological patterns','Teacher conference on how students are handling uncertainty in species richness data and extrapolation to conservation recommendations'],
+        summative:'Develop a rewilding proposal for a degraded ecosystem, quantifying expected trophic cascade effects using ecological models, and designing a monitoring plan with ArcGIS-based spatial analysis.',
+        exitQ:['Explain the latitudinal biodiversity gradient pattern you found in the map data and evaluate two competing hypotheses for why it exists.','What is the most significant limitation of the species richness dataset for making conservation policy recommendations?'],
+        rubric:['Quantifies the latitudinal gradient with specific data values and calculates a gradient slope or correlation coefficient','Evaluates protected area coverage adequacy using proportional biome representation data','Applies net primary productivity, trophic cascade, and island biogeography concepts with precision','Designs a conservation strategy with explicit criteria, geographic justification from map data, and acknowledgment of uncertainty'],
+        ngss:[
+          {code:'HS-LS2-6',title:'Ecosystems',desc:'Evaluate the claims, evidence, and reasoning that complex interactions in ecosystems maintain relatively consistent numbers and types of organisms in stable conditions, but that changing conditions may result in a new ecosystem.',cat:'PE'},
+          {code:'HS-LS4-6',title:'Biological Evolution',desc:'Create or revise a simulation to test a solution to mitigate adverse impacts of human activity on biodiversity.',cat:'PE'},
+          {code:'SEP-6',title:'Constructing Explanations',desc:'Construct an explanation based on valid and reliable evidence from multiple sources and consistent with multiple lines of evidence.',cat:'SEP'},
+          {code:'CC-7',title:'Stability and Change',desc:'Much of science deals with constructing explanations of how things change and how they remain stable. Feedback mechanisms can stabilize or destabilize a system.',cat:'CC'}
+        ]
+      }
+    }
   }
+};
+
+// ── MATCHER ─────────────────────────────────────────────────────────────────
+function matchProfile(input){
+  var q=input.toLowerCase();
+  for(var k in DB){
+    var p=DB[k];
+    for(var i=0;i<p.keys.length;i++){if(q.indexOf(p.keys[i])!==-1)return p;}
+  }
+  return null;
 }
 
-function renderLesson(l) {
-  // Header
-  document.getElementById('lesson-meta').innerHTML = `
-    <span class="meta-pill">📚 Grades ${l.gradeband}</span>
-    <span class="meta-pill">🔬 ${l.domain}</span>
-    <span class="meta-pill">⏱ ${l.duration}</span>
-    <span class="meta-pill">🗺 ArcGIS Integrated</span>
-  `;
-  document.getElementById('lesson-title').textContent = l.title;
-  document.getElementById('lesson-subtitle').textContent = l.subtitle;
-
-  // ENGAGE
-  document.getElementById('engage-content').innerHTML = `
-    <div class="content-block">
-      <h4>🎯 Opening Hook</h4>
-      <p>${l.engage.hook}</p>
-    </div>
-    <div class="content-block">
-      <h4>🧠 Elicit Prior Knowledge</h4>
-      <ul>${l.engage.priorKnowledge.map(q => `<li>${q}</li>`).join('')}</ul>
-    </div>
-    <div class="content-block">
-      <h4>📦 Materials Needed</h4>
-      <ul>${l.engage.materials.map(m => `<li>${m}</li>`).join('')}</ul>
-    </div>
-    <div class="content-block">
-      <h4>📝 Teacher Notes</h4>
-      <p>${l.engage.teacherNotes}</p>
-    </div>
-  `;
-
-  // EXPLORE
-  const mapUrl = l.explore.mapActivity.arcgisUrl || 'https://www.arcgis.com/apps/mapviewer/index.html';
-  const mapQuestions = l.explore.mapQuestions.map((q, i) => `
-    <div class="question-item">
-      <div class="q-label">Question ${i+1} · ${q.bloomsLevel}</div>
-      <p>${q.question}</p>
-      <div class="map-instruction">🗺 <strong>Map task:</strong> ${q.mapInstruction}</div>
-    </div>
-  `).join('');
-
-  document.getElementById('explore-content').innerHTML = `
-    <div class="content-block">
-      <h4>📋 Activity Overview</h4>
-      <p>${l.explore.overview}</p>
-    </div>
-    <div class="map-card">
-      <div class="map-card-header">
-        <span>🌍</span>
-        <div>
-          <strong>ArcGIS Map Activity</strong>
-          <small>${l.explore.mapActivity.layerDescription}</small>
-        </div>
-      </div>
-      <div class="map-card-body">
-        <p><strong>Suggested Feature Layers:</strong> ${l.explore.mapActivity.suggestedLayers.join(' · ')}</p>
-        <p>${l.explore.mapActivity.studentInstructions}</p>
-        <a href="${mapUrl}" target="_blank" class="map-link-btn">🗺 Open ArcGIS Map ↗</a>
-      </div>
-    </div>
-    <div class="content-block">
-      <h4>❓ Map-Based Questions</h4>
-      <p style="font-size:13px;color:#888;margin-bottom:12px;">Students must interact with the ArcGIS map before answering each question.</p>
-      ${mapQuestions}
-    </div>
-  `;
-
-  // EXPLAIN
-  const vocab = l.explain.keyVocabulary.map(v => `
-    <div style="padding:8px 0;border-bottom:1px solid var(--gray-100);">
-      <strong style="font-size:13px;color:var(--teal-800)">${v.term}</strong>
-      <span style="font-size:13px;color:var(--gray-600)"> — ${v.definition}</span>
-    </div>
-  `).join('');
-
-  document.getElementById('explain-content').innerHTML = `
-    <div class="content-block">
-      <h4>📖 Key Vocabulary</h4>
-      ${vocab}
-    </div>
-    <div class="content-block">
-      <h4>💡 Core Concepts to Address</h4>
-      <ol>${l.explain.coreConcepts.map(c => `<li>${c}</li>`).join('')}</ol>
-    </div>
-    <div class="content-block">
-      <h4>💬 Class Discussion Prompts</h4>
-      <ul>${l.explain.discussion.map(d => `<li>${d}</li>`).join('')}</ul>
-    </div>
-    <div class="content-block">
-      <h4>📝 Teacher Notes</h4>
-      <p>${l.explain.teacherNotes}</p>
-    </div>
-  `;
-
-  // ELABORATE
-  document.getElementById('elaborate-content').innerHTML = `
-    <div class="content-block">
-      <h4>🔭 Extension Activity</h4>
-      <p>${l.elaborate.activity}</p>
-    </div>
-    <div class="content-block">
-      <h4>🌎 Real-World Connections</h4>
-      <ul>${l.elaborate.realWorldConnections.map(r => `<li>${r}</li>`).join('')}</ul>
-    </div>
-    <div class="content-block">
-      <h4>🗺 Advanced Map Challenge</h4>
-      <p>${l.elaborate.extensionMapTask}</p>
-    </div>
-    <div class="content-block">
-      <h4>👥 Collaborative Activity</h4>
-      <p>${l.elaborate.groupWork}</p>
-    </div>
-  `;
-
-  // EVALUATE
-  document.getElementById('evaluate-content').innerHTML = `
-    <div class="content-block">
-      <h4>📊 Formative Assessments</h4>
-      <ul>${l.evaluate.formativeAssessments.map(f => `<li>${f}</li>`).join('')}</ul>
-    </div>
-    <div class="content-block">
-      <h4>🏆 Summative Task</h4>
-      <p>${l.evaluate.summativeTask}</p>
-    </div>
-    <div class="content-block">
-      <h4>🚪 Exit Ticket Questions</h4>
-      <ul>${l.evaluate.exitTicket.map(e => `<li>${e}</li>`).join('')}</ul>
-    </div>
-    <div class="content-block">
-      <h4>📋 Rubric Criteria</h4>
-      <ol>${l.evaluate.rubricCriteria.map(r => `<li>${r}</li>`).join('')}</ol>
-    </div>
-  `;
-
-  // NGSS
-  const catColors = {
-    'Performance Expectation': { bg: 'var(--teal-50)', color: 'var(--teal-800)' },
-    'Disciplinary Core Idea': { bg: 'var(--blue-50)', color: 'var(--blue-800)' },
-    'Science and Engineering Practice': { bg: 'var(--green-50)', color: 'var(--green-800)' },
-    'Crosscutting Concept': { bg: 'var(--amber-50)', color: 'var(--amber-800)' }
+// ── GENERIC FALLBACK ────────────────────────────────────────────────────────
+function genericLesson(topic,grade,domain,duration,geo){
+  var tc=topic.charAt(0).toUpperCase()+topic.slice(1);
+  var geoNote=geo?' with a focus on the '+geo+' region':'';
+  var hooks={'K-2':'Show an interesting photo related to your topic. Ask: "What do you notice? What do you wonder?"',
+    '3-5':'Present a puzzling observation about your topic. Ask students to brainstorm explanations in pairs before sharing.',
+    '6-8':'Show real-world data connected to the topic. Ask: "What questions does this raise? What would you need to know to explain this?"',
+    '9-12':'Present a complex real-world problem connected to the topic. Ask students to identify known facts, knowledge gaps, and first steps of investigation.'};
+  return {
+    title:tc, subtitle:'A '+duration+' 5E lesson for '+gradeLabel(grade)+geoNote,
+    gradeband:grade, domain:domain||'Science', duration:duration,
+    engage:{
+      hook:hooks[grade]||hooks['6-8'],
+      priorQ:['What do you already know about '+topic+'?','Where have you seen '+topic+' in your everyday life?','What questions do you have about '+topic+'?'],
+      materials:['Computers or tablets with internet access','Student science notebooks','Pencils and colored pencils'],
+      teacherNotes:'Record student prior knowledge and questions on chart paper. Revisit these at the end of the lesson to celebrate growth in understanding. Avoid correcting misconceptions now.'
+    },
+    explore:{
+      overview:'Students use ArcGIS online mapping to investigate real spatial data related to '+topic+'. They explore available layers, identify patterns, and record observations before drawing conclusions.',
+      mapUrl:'https://www.arcgis.com/apps/mapviewer/index.html',
+      mapLayers:['Environmental monitoring data relevant to topic','Geographic distribution and occurrence data','Government observational datasets'],
+      mapDesc:'Search the ArcGIS Living Atlas for layers related to '+topic+'. Look for environmental monitoring data, geographic distribution layers, and relevant government datasets.',
+      mapInstr:'Go to the ArcGIS map link. Use the layer list to find data related to '+topic+'. Click at least 5 locations and record what you find. Look for geographic patterns.',
+      questions:[
+        {q:'Where does '+topic+' occur most frequently according to the map data?',map:'Zoom out to see the full extent of the data and look for clusters or concentrations.',bloom:'Remembering'},
+        {q:'What geographic patterns do you notice in how '+topic+' is distributed across the map?',map:'Compare areas with high and low occurrence. What other geographic features do they share?',bloom:'Analyzing'},
+        {q:'What factors do you think explain the geographic distribution pattern you observed?',map:'Toggle additional layers such as climate, population, or land use to look for correlations.',bloom:'Evaluating'},
+        {q:'Based on the map data, where would you focus resources to address challenges related to '+topic+'?',map:'Identify the highest-need or highest-risk areas using the data and estimate their extent.',bloom:'Creating'}
+      ]
+    },
+    explain:{
+      vocab:[{t:tc,d:'The scientific phenomenon or concept being studied in this lesson'},{t:'Spatial pattern',d:'The geographic arrangement or distribution of a phenomenon across an area'},{t:'Data layer',d:'A set of geographic data displayed on a map, such as population or climate information'},{t:'Evidence',d:'Data or observations used to support a scientific claim or explanation'}],
+      concepts:[''+tc+' can be observed and measured using real-world spatial data','Geographic patterns in data reveal underlying scientific relationships and processes','Maps and spatial analysis tools are essential for modern scientific investigation'],
+      discussion:['How did the map data change or confirm what you thought you knew about '+topic+'?','What additional data would you want to see to better understand this topic?'],
+      teacherNotes:'Connect students map findings to the key scientific concepts. Use direct instruction to explain the mechanisms behind the patterns students observed. Fill conceptual gaps without dismissing student-generated reasoning.'
+    },
+    elaborate:{
+      activity:'Students apply their understanding of '+topic+' to investigate a local or regional connection'+geoNote+', using the ArcGIS map to compare their community with other places.',
+      realWorld:['Scientists study '+topic+' using the same types of data tools and maps used in this lesson','Understanding '+topic+' helps communities make better decisions about safety and resource management','Technology like satellite imagery and GIS enables monitoring of changes in '+topic+' over time at scales impossible by other means'],
+      extensionMap:'Challenge students to compare '+topic+' data across two very different regions and write a structured analysis explaining the differences using at least three specific pieces of map evidence.',
+      groupWork:'Groups create a community connection brief — they find their local community on the map, document what the data shows about '+topic+' in their area, and present their findings with at least two map-based evidence points.'
+    },
+    evaluate:{
+      formative:['Observation during map activity — check that students are reading data layers correctly and framing productive questions','Exit ticket reviewing key vocabulary and one main geographic pattern identified from the map exploration'],
+      summative:'Students create an illustrated data report about '+topic+' using evidence from the ArcGIS map, including at least one annotated map screenshot and a written explanation connecting spatial data to scientific concepts.',
+      exitQ:['Name one geographic pattern you found in the map data today and explain what scientific process or relationship it reveals.','How does what you learned about '+topic+' connect to a real decision made by people in your community?'],
+      rubric:['Accurately identifies a geographic pattern in the map data with specific location references','Uses correct scientific vocabulary in written or verbal explanations','Connects map evidence to a scientific concept or mechanism related to '+topic,'Asks evidence-based questions and proposes testable hypotheses']
+    },
+    ngss:[
+      {code:'SEP-4',title:'Analyzing & Interpreting Data',desc:'Analyze data using tools, technologies, and/or models to make valid and reliable scientific claims.',cat:'SEP'},
+      {code:'SEP-6',title:'Constructing Explanations',desc:'Construct an explanation based on valid and reliable evidence from multiple sources.',cat:'SEP'},
+      {code:'CC-1',title:'Patterns',desc:'Observed patterns of forms and events guide organization and classification, and they prompt questions about relationships and the factors that influence them.',cat:'CC'},
+      {code:'CC-2',title:'Cause and Effect',desc:'Cause and effect relationships are routinely identified, tested, and used to explain change. Correlation does not necessarily imply causation.',cat:'CC'}
+    ]
   };
-
-  document.getElementById('ngss-content').innerHTML = `
-    <div class="ngss-grid">
-      ${l.ngss.map(n => {
-        const c = catColors[n.category] || { bg: 'var(--gray-50)', color: 'var(--gray-800)' };
-        return `
-          <div class="ngss-item">
-            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
-              <span class="ngss-code">${n.code}</span>
-              <span style="background:${c.bg};color:${c.color};font-size:10px;font-weight:600;padding:3px 10px;border-radius:6px;letter-spacing:0.04em">${n.category}</span>
-            </div>
-            <strong style="display:block;font-size:13px;margin-bottom:4px;color:var(--gray-900)">${n.title}</strong>
-            <p>${n.description}</p>
-          </div>
-        `;
-      }).join('')}
-    </div>
-    <div class="content-block" style="margin-top:1.2rem">
-      <h4>📌 About NGSS Alignment</h4>
-      <p>These standards are drawn from the <em>Next Generation Science Standards</em> framework. Performance Expectations describe what students should be able to do; Disciplinary Core Ideas are the content; Science &amp; Engineering Practices are the skills; Crosscutting Concepts connect ideas across disciplines.</p>
-    </div>
-  `;
-
-  // Reset to first tab
-  document.querySelectorAll('.lesson-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.five-e-nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('section-engage').classList.add('active');
-  document.querySelectorAll('.five-e-nav button')[0].classList.add('active');
-
-  document.getElementById('lesson-output').style.display = 'block';
-  document.getElementById('lesson-output').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function downloadRTF() {
-  if (!currentLesson) return;
-  const l = currentLesson;
-  const mapUrl = l.explore.mapActivity.arcgisUrl || 'https://www.arcgis.com/apps/mapviewer/index.html';
+function gradeLabel(g){return {'K-2':'Grades K–2','3-5':'Grades 3–5','6-8':'Grades 6–8','9-12':'Grades 9–12'}[g]||g;}
 
-  let rtf = '{\\rtf1\\ansi\\deff0\n';
-  rtf += '{\\fonttbl{\\f0 Times New Roman;}{\\f1 Arial;}}\n';
-  rtf += '{\\colortbl;\\red15\\green110\\blue86;\\red40\\green80\\blue10;\\red12\\green95\\blue165;}\n';
+// ── BUILD STRUCTURED LESSON ─────────────────────────────────────────────────
+function buildLesson(topic,grade,domain,duration,geo){
+  var p=matchProfile(topic);
+  if(!p) return genericLesson(topic,grade,domain,duration,geo);
+  var d=p.data[grade];
+  if(!d) d=p.data['6-8'];
+  var geoNote=geo?' with a focus on the '+geo+' region':'';
+  return {
+    title:p.label,
+    subtitle:'A '+duration+' 5E lesson for '+gradeLabel(grade)+geoNote,
+    gradeband:grade,domain:domain||p.domain,duration:duration,
+    engage:{hook:d.hook,priorQ:d.priorQ,materials:d.materials,teacherNotes:d.teacherNotes},
+    explore:{
+      overview:'Students use ArcGIS online mapping tools to investigate real '+p.label.toLowerCase()+' data. They examine spatial patterns, identify geographic trends, and answer inquiry questions that require direct map interaction before responding. This phase prioritizes student discovery over direct instruction.',
+      mapUrl:p.mapUrl,mapLayers:p.mapLayers,mapDesc:p.mapDesc,mapInstr:d.mapInstr,questions:d.questions
+    },
+    explain:{vocab:d.vocab,concepts:d.concepts,discussion:d.discussion,teacherNotes:d.teacherNotes},
+    elaborate:{activity:'Students apply their understanding of '+p.label.toLowerCase()+' to investigate a new but related scenario'+geoNote+'. They design a solution, construct an evidence-based argument, or explore a local connection using extended map data.',realWorld:d.realWorld,extensionMap:d.extensionMap,groupWork:d.groupWork},
+    evaluate:{formative:d.formative,summative:d.summative,exitQ:d.exitQ,rubric:d.rubric},
+    ngss:d.ngss
+  };
+}
 
-  const h1 = (t) => `\\f1\\fs32\\b\\cf1 ${esc(t)}\\par\\b0\\cf0\\f0\\fs24\\par\n`;
-  const h2 = (t) => `\\f1\\fs26\\b\\cf1 ${esc(t)}\\par\\b0\\cf0\\f0\\fs24\\par\n`;
-  const h3 = (t) => `\\f1\\fs22\\b\\cf2 ${esc(t)}\\par\\b0\\cf0\\f0\\fs22\n`;
-  const p = (t) => `\\fs22 ${esc(t)}\\par\\par\n`;
-  const li = (t) => `\\fs22 \\bullet  ${esc(t)}\\par\n`;
-  const sep = () => `\\par\\brdrb\\brdrs\\brdrw10 \\par\n`;
-
-  function esc(s) {
-    return (s || '').replace(/\\/g, '\\\\').replace(/[{}]/g, m => '\\' + m)
-      .replace(/[^\x00-\x7F]/g, c => `\\'${c.charCodeAt(0).toString(16).padStart(2, '0')}`);
-  }
-
-  rtf += h1(`5E Science Lesson Plan: ${l.title}`);
-  rtf += p(l.subtitle);
-  rtf += p(`Grade Band: ${l.gradeband}  |  Domain: ${l.domain}  |  Duration: ${l.duration}`);
-  rtf += sep();
+// ── RENDER ──────────────────────────────────────────────────────────────────
+function render(l){
+  document.getElementById('pills').innerHTML=
+    '<span class="lhpill">&#128218; '+l.gradeband+'</span>'+
+    '<span class="lhpill">&#128300; '+l.domain+'</span>'+
+    '<span class="lhpill">&#9201; '+l.duration+'</span>'+
+    '<span class="lhpill">&#127758; ArcGIS Integrated</span>';
+  document.getElementById('ltitle').textContent=l.title;
+  document.getElementById('lsub').textContent=l.subtitle;
 
   // ENGAGE
-  rtf += h2('Phase 1: ENGAGE');
-  rtf += h3('Opening Hook'); rtf += p(l.engage.hook);
-  rtf += h3('Prior Knowledge Questions');
-  l.engage.priorKnowledge.forEach(q => { rtf += li(q); });
-  rtf += '\\par\n';
-  rtf += h3('Materials'); l.engage.materials.forEach(m => { rtf += li(m); }); rtf += '\\par\n';
-  rtf += h3('Teacher Notes'); rtf += p(l.engage.teacherNotes);
-  rtf += sep();
+  document.getElementById('s-engage').innerHTML=
+    '<div class="sechdr"><div class="secbadge engage">E</div><div class="seclbl"><h3>Engage</h3><p>Hook &amp; Prior Knowledge</p></div></div>'+
+    blk('&#127919; Opening Hook','<p>'+l.engage.hook+'</p>')+
+    blk('&#129504; Elicit Prior Knowledge','<ul>'+l.engage.priorQ.map(function(q){return '<li>'+q+'</li>';}).join('')+'</ul>')+
+    blk('&#128230; Materials','<ul>'+l.engage.materials.map(function(m){return '<li>'+m+'</li>';}).join('')+'</ul>')+
+    blk('&#128221; Teacher Notes','<p>'+l.engage.teacherNotes+'</p>');
 
   // EXPLORE
-  rtf += h2('Phase 2: EXPLORE');
-  rtf += p(l.explore.overview);
-  rtf += h3('ArcGIS Map Activity');
-  rtf += p(`Map URL: ${mapUrl}`);
-  rtf += p(`Suggested Layers: ${l.explore.mapActivity.suggestedLayers.join(', ')}`);
-  rtf += p(l.explore.mapActivity.studentInstructions);
-  rtf += h3('Map-Based Questions (Students interact with map before answering)');
-  l.explore.mapQuestions.forEach((q, i) => {
-    rtf += `\\fs22\\b Q${i+1} [${esc(q.bloomsLevel)}]:\\b0  ${esc(q.question)}\\par\n`;
-    rtf += `\\fs20\\i Map Task: ${esc(q.mapInstruction)}\\i0\\par\\par\n`;
-  });
-  rtf += sep();
+  var qs=l.explore.questions.map(function(q,i){
+    return '<div class="qitem"><div class="qnum">Question '+(i+1)+' &middot; '+q.bloom+'</div><p>'+q.q+'</p><div class="qmap">&#128506; <strong>Map task:</strong> '+q.map+'</div></div>';
+  }).join('');
+  document.getElementById('s-explore').innerHTML=
+    '<div class="sechdr"><div class="secbadge explore">E</div><div class="seclbl"><h3>Explore</h3><p>Investigation &amp; Map Activity</p></div></div>'+
+    blk('&#128203; Activity Overview','<p>'+l.explore.overview+'</p>')+
+    '<div class="mcard"><div class="mcard-hdr"><span style="font-size:20px">&#127758;</span><div><strong>ArcGIS Map Activity</strong><small>'+l.explore.mapDesc+'</small></div></div>'+
+    '<div class="mcard-body"><p><strong>Suggested Feature Layers:</strong> '+l.explore.mapLayers.join(' &middot; ')+'</p><p>'+l.explore.mapInstr+'</p>'+
+    '<a href="'+l.explore.mapUrl+'" target="_blank" class="mbtn">&#128506; Open ArcGIS Map &#x2197;</a></div></div>'+
+    blk('&#10067; Map-Based Questions','<p style="font-size:12px;color:var(--ink3);margin-bottom:10px">Students must interact with the ArcGIS map before answering each question.</p>'+qs);
 
   // EXPLAIN
-  rtf += h2('Phase 3: EXPLAIN');
-  rtf += h3('Key Vocabulary');
-  l.explain.keyVocabulary.forEach(v => { rtf += `\\fs22\\b ${esc(v.term)}:\\b0  ${esc(v.definition)}\\par\n`; });
-  rtf += '\\par\n';
-  rtf += h3('Core Concepts'); l.explain.coreConcepts.forEach(c => { rtf += li(c); }); rtf += '\\par\n';
-  rtf += h3('Discussion Prompts'); l.explain.discussion.forEach(d => { rtf += li(d); }); rtf += '\\par\n';
-  rtf += sep();
+  var vc=l.explain.vocab.map(function(v){return '<div class="vitem"><span class="vterm">'+v.t+' &mdash; </span><span class="vdef">'+v.d+'</span></div>';}).join('');
+  document.getElementById('s-explain').innerHTML=
+    '<div class="sechdr"><div class="secbadge explain">E</div><div class="seclbl"><h3>Explain</h3><p>Direct Instruction &amp; Sense-Making</p></div></div>'+
+    blk('&#128214; Key Vocabulary',vc)+
+    blk('&#128161; Core Concepts','<ol>'+l.explain.concepts.map(function(c){return '<li>'+c+'</li>';}).join('')+'</ol>')+
+    blk('&#128172; Discussion Prompts','<ul>'+l.explain.discussion.map(function(d){return '<li>'+d+'</li>';}).join('')+'</ul>')+
+    blk('&#128221; Teacher Notes','<p>'+l.explain.teacherNotes+'</p>');
 
   // ELABORATE
-  rtf += h2('Phase 4: ELABORATE');
-  rtf += h3('Extension Activity'); rtf += p(l.elaborate.activity);
-  rtf += h3('Real-World Connections'); l.elaborate.realWorldConnections.forEach(r => { rtf += li(r); }); rtf += '\\par\n';
-  rtf += h3('Advanced Map Challenge'); rtf += p(l.elaborate.extensionMapTask);
-  rtf += h3('Collaborative Activity'); rtf += p(l.elaborate.groupWork);
-  rtf += sep();
+  document.getElementById('s-elaborate').innerHTML=
+    '<div class="sechdr"><div class="secbadge elaborate">E</div><div class="seclbl"><h3>Elaborate</h3><p>Apply &amp; Extend</p></div></div>'+
+    blk('&#128301; Extension Activity','<p>'+l.elaborate.activity+'</p>')+
+    blk('&#127758; Real-World Connections','<ul>'+l.elaborate.realWorld.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ul>')+
+    blk('&#128506; Advanced Map Challenge','<p>'+l.elaborate.extensionMap+'</p>')+
+    blk('&#128101; Collaborative Activity','<p>'+l.elaborate.groupWork+'</p>');
 
   // EVALUATE
-  rtf += h2('Phase 5: EVALUATE');
-  rtf += h3('Formative Assessments'); l.evaluate.formativeAssessments.forEach(f => { rtf += li(f); }); rtf += '\\par\n';
-  rtf += h3('Summative Task'); rtf += p(l.evaluate.summativeTask);
-  rtf += h3('Exit Ticket'); l.evaluate.exitTicket.forEach(e => { rtf += li(e); }); rtf += '\\par\n';
-  rtf += h3('Rubric Criteria'); l.evaluate.rubricCriteria.forEach(r => { rtf += li(r); }); rtf += '\\par\n';
-  rtf += sep();
+  document.getElementById('s-evaluate').innerHTML=
+    '<div class="sechdr"><div class="secbadge evaluate">E</div><div class="seclbl"><h3>Evaluate</h3><p>Assessment &amp; Reflection</p></div></div>'+
+    blk('&#128202; Formative Assessments','<ul>'+l.evaluate.formative.map(function(f){return '<li>'+f+'</li>';}).join('')+'</ul>')+
+    blk('&#127942; Summative Task','<p>'+l.evaluate.summative+'</p>')+
+    blk('&#128682; Exit Ticket Questions','<ul>'+l.evaluate.exitQ.map(function(e){return '<li>'+e+'</li>';}).join('')+'</ul>')+
+    blk('&#128203; Rubric Criteria','<ol>'+l.evaluate.rubric.map(function(r){return '<li>'+r+'</li>';}).join('')+'</ol>');
 
   // NGSS
-  rtf += h2('NGSS Standards Alignment');
-  l.ngss.forEach(n => {
-    rtf += `\\fs22\\b ${esc(n.code)} - ${esc(n.title)}\\b0\\par\n`;
-    rtf += `\\fs20\\i [${esc(n.category)}]\\i0\\par\n`;
-    rtf += `\\fs20 ${esc(n.description)}\\par\\par\n`;
-  });
-  rtf += sep();
+  var catCls={PE:'pe',DCI:'dci',SEP:'sep',CC:'cc'};
+  var catLbl={PE:'Performance Expectation',DCI:'Disciplinary Core Idea',SEP:'Science & Engineering Practice',CC:'Crosscutting Concept'};
+  var ni=l.ngss.map(function(n){
+    return '<div class="nitem"><div><span class="ncode">'+n.code+'</span><span class="ncat '+(catCls[n.cat]||'pe')+'">'+(catLbl[n.cat]||n.cat)+'</span></div><div class="ntitle">'+n.title+'</div><div class="ndesc">'+n.desc+'</div></div>';
+  }).join('');
+  document.getElementById('s-ngss').innerHTML=
+    '<div class="sechdr"><div class="secbadge ngss">N</div><div class="seclbl"><h3>NGSS Alignment</h3><p>Next Generation Science Standards</p></div></div>'+
+    ni+
+    blk('&#128204; About These Standards','<p>Standards are drawn from the Next Generation Science Standards framework. PEs describe student performance; DCIs are content knowledge; SEPs are scientific practices; CCs connect ideas across disciplines.</p>');
 
-  // Map Link
-  rtf += h2('ArcGIS Map Link');
-  rtf += p(`Interactive Map: ${mapUrl}`);
-  rtf += p('Open this URL in a browser to access the ArcGIS feature service layers for student exploration.');
+  document.querySelectorAll('.esec').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.etab').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('s-engage').classList.add('active');
+  document.querySelectorAll('.etab')[0].classList.add('active');
+  document.getElementById('lesson-out').style.display='block';
+  document.getElementById('lesson-out').scrollIntoView({behavior:'smooth',block:'start'});
+}
 
-  rtf += '}';
+function blk(hdr,body){return '<div class="blk"><h4>'+hdr+'</h4>'+body+'</div>';}
 
-  const blob = new Blob([rtf], { type: 'application/rtf' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `Lesson_${l.title.replace(/[^a-zA-Z0-9]/g, '_').slice(0,40)}.rtf`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+// ── GENERATE ─────────────────────────────────────────────────────────────────
+function generate(){
+  var topic=document.getElementById('topic').value.trim();
+  var grade=document.getElementById('grade').value;
+  var domain=document.getElementById('domain').value;
+  var duration=document.getElementById('duration').value;
+  var geo=document.getElementById('geo').value.trim();
+  if(!topic||!grade){clog('ERROR: Please enter a science topic and select a grade band before generating.','error');return;}
+  clog('Building lesson plan: "'+topic+'" | '+grade+' | '+duration,'info');
+  var p=matchProfile(topic);
+  if(p){clog('Matched knowledge base profile: '+p.label,'success');}
+  else{clog('Topic not in built-in knowledge base — using general template. For richer output, try: Tornadoes, Watersheds, Plate Tectonics, or Ecosystems.','warn');}
+  try{
+    var l=buildLesson(topic,grade,domain,duration,geo);
+    LESSON=l;
+    clog('Lesson generated: '+l.ngss.length+' NGSS standards, '+l.explore.questions.length+' map questions.','success');
+    render(l);
+  }catch(err){
+    clog('ERROR: '+err.message,'error');
+    console.error(err);
+  }
+}
+
+// ── RTF DOWNLOAD ─────────────────────────────────────────────────────────────
+function dlRTF(){
+  if(!LESSON){clog('No lesson generated yet.','warn');return;}
+  var l=LESSON;
+  function esc(s){return (s||'').replace(/\\/g,'\\\\').replace(/[{}]/g,function(m){return '\\'+m;}).replace(/[^\x00-\x7F]/g,function(c){var h=c.charCodeAt(0).toString(16);return "\\'"+h.padStart(2,'0');});}
+  var h1=function(t){return '\\f1\\fs32\\b\\cf1 '+esc(t)+'\\b0\\cf0\\f0\\par\\par\n';};
+  var h2=function(t){return '\\f1\\fs26\\b\\cf1 '+esc(t)+'\\b0\\cf0\\f0\\par\\par\n';};
+  var h3=function(t){return '\\f1\\fs22\\b\\cf2 '+esc(t)+'\\b0\\cf0\\f0\\par\n';};
+  var p=function(t){return '\\fs22 '+esc(t)+'\\par\\par\n';};
+  var li=function(t){return '\\fs22 \\bullet  '+esc(t)+'\\par\n';};
+  var sep=function(){return '\\par\\brdrb\\brdrs\\brdrw5 \\par\n';};
+  var r='{\\rtf1\\ansi\\deff0\n{\\fonttbl{\\f0 Georgia;}{\\f1 Arial;}}\n{\\colortbl;\\red45\\green92\\blue63;\\red30\\green60\\blue40;}\n';
+  r+=h1('5E Lesson Plan: '+l.title);r+=p(l.subtitle);r+=p('Grade Band: '+l.gradeband+'  |  Domain: '+l.domain+'  |  Duration: '+l.duration);r+=sep();
+  r+=h2('ENGAGE');r+=h3('Opening Hook');r+=p(l.engage.hook);
+  r+=h3('Prior Knowledge Questions');l.engage.priorQ.forEach(function(q){r+=li(q);});r+='\\par\n';
+  r+=h3('Materials');l.engage.materials.forEach(function(m){r+=li(m);});r+='\\par\n';
+  r+=h3('Teacher Notes');r+=p(l.engage.teacherNotes);r+=sep();
+  r+=h2('EXPLORE');r+=p(l.explore.overview);
+  r+=h3('ArcGIS Map Link');r+=p(l.explore.mapUrl);
+  r+=h3('Suggested Feature Layers');l.explore.mapLayers.forEach(function(m){r+=li(m);});r+='\\par\n';
+  r+=h3('Student Map Instructions');r+=p(l.explore.mapInstr);
+  r+=h3('Map-Based Questions');
+  l.explore.questions.forEach(function(q,i){
+    r+='\\fs22\\b Q'+(i+1)+' ['+esc(q.bloom)+']:\\b0  '+esc(q.q)+'\\par\n';
+    r+='\\fs20\\i Map Task: '+esc(q.map)+'\\i0\\par\\par\n';
+  });r+=sep();
+  r+=h2('EXPLAIN');r+=h3('Key Vocabulary');
+  l.explain.vocab.forEach(function(v){r+='\\fs22\\b '+esc(v.t)+':\\b0  '+esc(v.d)+'\\par\n';});r+='\\par\n';
+  r+=h3('Core Concepts');l.explain.concepts.forEach(function(c){r+=li(c);});r+='\\par\n';
+  r+=h3('Discussion Prompts');l.explain.discussion.forEach(function(d){r+=li(d);});r+='\\par\n';r+=sep();
+  r+=h2('ELABORATE');
+  r+=h3('Extension Activity');r+=p(l.elaborate.activity);
+  r+=h3('Real-World Connections');l.elaborate.realWorld.forEach(function(c){r+=li(c);});r+='\\par\n';
+  r+=h3('Advanced Map Challenge');r+=p(l.elaborate.extensionMap);
+  r+=h3('Collaborative Activity');r+=p(l.elaborate.groupWork);r+=sep();
+  r+=h2('EVALUATE');
+  r+=h3('Formative Assessments');l.evaluate.formative.forEach(function(f){r+=li(f);});r+='\\par\n';
+  r+=h3('Summative Task');r+=p(l.evaluate.summative);
+  r+=h3('Exit Ticket');l.evaluate.exitQ.forEach(function(e){r+=li(e);});r+='\\par\n';
+  r+=h3('Rubric Criteria');l.evaluate.rubric.forEach(function(c){r+=li(c);});r+='\\par\n';r+=sep();
+  r+=h2('NGSS Standards Alignment');
+  var cl={PE:'Performance Expectation',DCI:'Disciplinary Core Idea',SEP:'Science & Engineering Practice',CC:'Crosscutting Concept'};
+  l.ngss.forEach(function(n){r+='\\fs22\\b '+esc(n.code)+'\\b0  ['+esc(cl[n.cat]||n.cat)+']\\par\n'+esc(n.title)+'\\par\n\\fs20 '+esc(n.desc)+'\\par\\par\n';});
+  r+=sep();r+=h2('ArcGIS Map Link');r+=p(l.explore.mapUrl);r+='}';
+  var blob=new Blob([r],{type:'application/rtf'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='LessonPlan_'+l.title.replace(/[^a-zA-Z0-9]/g,'_').slice(0,40)+'.rtf';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  clog('RTF downloaded: '+a.download,'success');
 }
 </script>
 </body>
