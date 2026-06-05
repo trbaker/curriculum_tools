@@ -570,6 +570,47 @@
     display: none;
   }
 
+
+  .console-panel {
+    margin-top: 1.4rem;
+    border: 1px solid var(--gray-100);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .console-header {
+    background: var(--gray-900);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .console-header-left { display: flex; align-items: center; gap: 8px; }
+  .console-dots { display: flex; gap: 5px; }
+  .console-dots span { width: 10px; height: 10px; border-radius: 50%; }
+  .console-dots span:nth-child(1) { background: #ff5f57; }
+  .console-dots span:nth-child(2) { background: #febc2e; }
+  .console-dots span:nth-child(3) { background: #28c840; }
+  .console-label { font-size: 11px; color: var(--gray-400); font-family: monospace; letter-spacing: 0.04em; }
+  .console-clear {
+    background: none; border: 1px solid var(--gray-600); color: var(--gray-400);
+    font-family: monospace; font-size: 10px; padding: 3px 9px; border-radius: 4px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .console-clear:hover { border-color: var(--gray-400); color: #fff; }
+  .console-body {
+    background: #1a1a1a; padding: 10px 14px; min-height: 90px; max-height: 200px;
+    overflow-y: auto; font-family: monospace; font-size: 12px; line-height: 1.7;
+  }
+  .console-empty { color: #555; font-style: italic; }
+  .console-line { display: flex; gap: 10px; padding: 1px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+  .console-line:last-child { border-bottom: none; }
+  .console-time { color: #555; flex-shrink: 0; }
+  .console-line.info .console-msg { color: #7dd3fc; }
+  .console-line.success .console-msg { color: #86efac; }
+  .console-line.warn .console-msg { color: #fde68a; }
+  .console-line.error .console-msg { color: #fca5a5; }
+  .console-line.log .console-msg { color: #d1d5db; }
+
   .streaming-indicator {
     display: inline-block;
     width: 6px; height: 14px;
@@ -668,6 +709,19 @@
     <button class="generate-btn" id="generate-btn" onclick="generateLesson()">
       <span>✦</span> Generate 5E Lesson Plan
     </button>
+
+    <div class="console-panel">
+      <div class="console-header">
+        <div class="console-header-left">
+          <div class="console-dots"><span></span><span></span><span></span></div>
+          <span class="console-label">System Console &mdash; v1.0</span>
+        </div>
+        <button class="console-clear" onclick="clearConsole()">Clear</button>
+      </div>
+      <div class="console-body" id="console-body">
+        <span class="console-empty">No messages yet. Console output will appear here.</span>
+      </div>
+    </div>
   </div>
 
   <div class="loading" id="loading">
@@ -776,6 +830,25 @@
 </div>
 
 <script>
+
+function clearConsole() {
+  document.getElementById('console-body').innerHTML = '<span class="console-empty">Console cleared.</span>';
+}
+
+function consoleLog(msg, type) {
+  type = type || 'log';
+  const body = document.getElementById('console-body');
+  const empty = body.querySelector('.console-empty');
+  if (empty) empty.remove();
+  const now = new Date();
+  const ts = now.toTimeString().slice(0,8);
+  const line = document.createElement('div');
+  line.className = 'console-line ' + type;
+  line.innerHTML = '<span class="console-time">' + ts + '</span><span class="console-msg">' + String(msg).replace(/</g,'&lt;') + '</span>';
+  body.appendChild(line);
+  body.scrollTop = body.scrollHeight;
+}
+
 let currentLesson = null;
 
 function showSection(id, btn) {
@@ -801,6 +874,7 @@ async function generateLesson() {
   errEl.style.display = 'none';
 
   document.getElementById('generate-btn').disabled = true;
+  consoleLog('Generating lesson plan for topic: ' + topic + ' | Grade: ' + grade, 'info');
   document.getElementById('loading').style.display = 'block';
   document.getElementById('lesson-output').style.display = 'none';
 
@@ -865,6 +939,7 @@ Rules:
     const data = await response.json();
     clearInterval(msgInterval);
 
+    consoleLog('API response status: ' + response.status, response.ok ? 'success' : 'error');
     if (!response.ok) {
       throw new Error(`API error ${response.status}: ${JSON.stringify(data)}`);
     }
@@ -874,6 +949,7 @@ Rules:
 
     const raw = data.content.map(i => i.text || '').join('');
     console.log('Raw API response:', raw);
+    consoleLog('Response received (' + raw.length + ' chars). Parsing JSON...', 'info');
 
     // Extract JSON — handle cases where model wraps in fences despite instructions
     let jsonStr = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
@@ -886,11 +962,15 @@ Rules:
     const lesson = JSON.parse(jsonStr);
     currentLesson = lesson;
 
+    consoleLog('Lesson parsed successfully. Rendering...', 'success');
     renderLesson(lesson);
 
   } catch (err) {
     clearInterval(msgInterval);
     console.error('Lesson generation error:', err);
+    consoleLog('ERROR: ' + err.message, 'error');
+    // alert removed in favour of console
+    consoleLog('Full error: ' + err.stack, 'error');
     alert(`Something went wrong: ${err.message}\n\nCheck the browser console for details.`);
   } finally {
     document.getElementById('loading').style.display = 'none';
